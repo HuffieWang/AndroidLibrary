@@ -1,7 +1,8 @@
 package com.z1ong.android.library.fetcher;
 
-import java.util.Collections;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
