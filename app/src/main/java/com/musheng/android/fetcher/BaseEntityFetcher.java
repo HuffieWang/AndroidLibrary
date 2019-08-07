@@ -1,4 +1,4 @@
-package com.z1ong.android.library.fetcher;
+package com.musheng.android.fetcher;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -91,7 +91,7 @@ public abstract class BaseEntityFetcher<R extends IEntityRequest, E> {
      * Description : 同步调用支持的数据提供器   
      * @param request : 请求参数，根据需要自行定义
      */
-    public List<E> execute(R request) throws BaseEntityThrowable{
+    public List<E> execute(R request) throws BaseEntityThrowable {
         
         Collection<IEntityProvider<R, E>> entityProviders = providerMap.values();
         if(entityProviders.isEmpty()) {

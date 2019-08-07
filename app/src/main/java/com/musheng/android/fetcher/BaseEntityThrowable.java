@@ -1,4 +1,4 @@
-package com.z1ong.android.library.fetcher;
+package com.musheng.android.fetcher;
 
 public class BaseEntityThrowable extends Throwable {
 
