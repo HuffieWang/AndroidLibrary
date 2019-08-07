@@ -15,6 +15,11 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Author      : MuSheng
+ * CreateDate  : 2019/08/07 14:32
+ * Description : 加载提示，支持绑定其他组件的生命周期，支持自定义显示内容
+ */
 public class MSLoading {
 
     private static List<MSLoadingLifeCycleProvider> lifeCycleProviders = new ArrayList<>();
@@ -23,14 +28,33 @@ public class MSLoading {
     private WeakReference<ViewGroup> viewGroupWeakReference;
     private View loadingView;
 
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/8/7 14:20
+     * Description : 添加支持绑定生命周期的组件，在MSLoadingLifeCycleProvider中应合理调用show()和
+     *               和hide()
+     */
     public static void addLifeCycleProvider(MSLoadingLifeCycleProvider provider){
         lifeCycleProviders.add(provider);
     }
 
+
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/8/7 14:32
+     * Description : 设置自定义的显示内容，如不调用此方法，将显示默认的加载动画
+     */
     public static void setViewProvider(MSLoadingViewProvider provider){
         contentProvider = provider;
     }
 
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/8/7 14:33
+     * Description : 将加载器绑定于指定组件的生命周期，组件类型需要提前在addLifeCycleProvider()注册
+     * @param viewGroup : 加载提示显示的位置
+     * @param t : 用于绑定生命周期的组件
+     */
     public static <T> T bindLifeCycle(ViewGroup viewGroup, T t){
         for(MSLoadingLifeCycleProvider provider : lifeCycleProviders){
             if(provider.isInstance(t)){
@@ -41,10 +65,21 @@ public class MSLoading {
         return t;
     }
 
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/8/7 14:36
+     * Description : 加载提示可以直接实例化使用
+     * @param viewGroup : 加载提示显示的位置
+     */
     public MSLoading(ViewGroup viewGroup) {
         viewGroupWeakReference = new WeakReference<>(viewGroup);
     }
 
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/8/7 14:37
+     * Description : 显示加载提示
+     */
     public void show(){
         ViewGroup viewGroup = viewGroupWeakReference.get();
         if(viewGroup != null){
@@ -67,6 +102,11 @@ public class MSLoading {
         }
     }
 
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/8/7 14:38
+     * Description : 隐藏加载提示
+     */
     public void hide(){
         ViewGroup viewGroup = viewGroupWeakReference.get();
         if(viewGroup != null && loadingView != null){

@@ -1,19 +1,19 @@
 package com.musheng.android.fetcher;
 
-public class BaseEntityThrowable extends Throwable {
+public class MSEntityThrowable extends Throwable {
 
     private int errorCode;
     private String errorMessage;
 
-    public BaseEntityThrowable(int errorCode) {
+    public MSEntityThrowable(int errorCode) {
         this.errorCode = errorCode;
     }
 
-    public BaseEntityThrowable(String errorMessage) {
+    public MSEntityThrowable(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
-    public BaseEntityThrowable(int errorCode, String errorMessage) {
+    public MSEntityThrowable(int errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }

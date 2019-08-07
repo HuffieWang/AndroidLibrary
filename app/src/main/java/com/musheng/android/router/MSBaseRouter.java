@@ -1,7 +1,7 @@
 package com.musheng.android.router;
 
 /**
- * Author      : FJ
+ * Author      : MuSheng
  * CreateDate  : 2019/06/13 14:34
  * Description : 1. PATH即RouteTable中的路由地址，格式为"/path/+类名"
  *               2. 构造方法的输入参数即RouteExtra中的路由参数
@@ -12,27 +12,27 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
-public abstract class AbstractRouter implements Serializable {
+public abstract class MSBaseRouter implements Serializable {
 
     public static final String TAG = "ROUTER";
 
-    private Class<? extends AbstractRouter> backRouter;
+    private Class<? extends MSBaseRouter> backRouter;
 
-    public Class<? extends AbstractRouter> getBackRouter() {
+    public Class<? extends MSBaseRouter> getBackRouter() {
         return backRouter;
     }
 
     /**
-     * Author      : FJ
+     * Author      : MuSheng
      * CreateDate  : 2019/6/24 0024 上午 10:20
      * Description : 设置返回地址    
      */
-    public void setBackRouter(Class<? extends AbstractRouter> backRouter) {
+    public void setBackRouter(Class<? extends MSBaseRouter> backRouter) {
         this.backRouter = backRouter;
     }
     
     /**
-     * Author      : FJ
+     * Author      : MuSheng
      * CreateDate  : 2019/6/24 0024 上午 10:20
      * Description : 获取设置的返回地址   
      */
@@ -53,7 +53,7 @@ public abstract class AbstractRouter implements Serializable {
     }
     
     /**
-     * Author      : FJ
+     * Author      : MuSheng
      * CreateDate  : 2019/6/24 0024 上午 10:18
      * Description : 返回到设置的返回地址
      * Attention   : 返回地址要创建对应返回值的构造方法，参数顺序也要相同，否则不能返回
@@ -92,7 +92,7 @@ public abstract class AbstractRouter implements Serializable {
                 }
             }
             if(constructor != null){
-                Router.navigation((AbstractRouter) constructor.newInstance(objects));
+                MSRouter.navigation((MSBaseRouter) constructor.newInstance(objects));
                 return true;
             }
         } catch (IllegalAccessException e) {
