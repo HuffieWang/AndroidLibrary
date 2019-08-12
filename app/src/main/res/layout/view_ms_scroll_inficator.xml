@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/ms_scroll_indicator_go_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_go_top"/>
+
+    <RelativeLayout
+        android:id="@+id/ms_scroll_indicator_page_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_go_top_empty"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/ms_scroll_indicator_current_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="#000000"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-thin"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/ms_scroll_indicator_page_div"/>
+        <View
+            android:id="@+id/ms_scroll_indicator_page_div"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:background="#DCDCDC"
+            android:layout_height="1dp"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:id="@+id/ms_scroll_indicator_total_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="#000000"
+            android:textSize="12dp"
+            android:fontFamily="sans-serif-light"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/ms_scroll_indicator_page_div"
+            />
+    </RelativeLayout>
+</RelativeLayout>
