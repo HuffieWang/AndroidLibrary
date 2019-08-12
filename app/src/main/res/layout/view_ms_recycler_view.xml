@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.musheng.android.view.MSScrollIndicator
+    <com.musheng.android.view.recycler.MSScrollIndicator
         android:id="@+id/view_ms_scroll_indicator"
         android:layout_width="40dp"
         android:layout_height="40dp"

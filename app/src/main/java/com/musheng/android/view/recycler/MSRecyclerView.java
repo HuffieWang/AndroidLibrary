@@ -11,7 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.z1ong.android.library.R;
+import com.musheng.android.library.R;
+
 
 /**
  * Author      : MuSheng
@@ -21,10 +22,6 @@ import com.z1ong.android.library.R;
 public class MSRecyclerView extends RelativeLayout {
 
     private RecyclerView recyclerView;
-
-    public MSRecyclerView(Context context) {
-        super(context);
-    }
 
     public MSRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);

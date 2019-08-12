@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.z1ong.android.library.R;
+import com.musheng.android.library.R;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
