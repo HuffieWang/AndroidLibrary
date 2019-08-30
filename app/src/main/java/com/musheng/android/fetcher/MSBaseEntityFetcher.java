@@ -197,28 +197,28 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * CreateDate  : 2019/7/31 0031 下午 3:39
      * Description : 获取网络数据
      */
-    public abstract List<E> fetchNetwork(R request);
+    public abstract List<E> fetchNetwork(R request) throws Exception;
 
     /**
      * Author      : MuSheng
      * CreateDate  : 2019/7/31 0031 下午 3:43
      * Description : 获取持久化数据    
      */
-    public abstract List<E> fetchCache(R request);
+    public abstract List<E> fetchCache(R request) throws Exception;
 
     /**
      * Author      : MuSheng
      * CreateDate  : 2019/7/31 0031 下午 3:43
      * Description : 将数据持久化   
      */
-    public abstract void writeCache(R request, List<E> entity);
+    public abstract void writeCache(R request, List<E> entity) throws Exception;
 
     /**
      * Author      : MuSheng
      * CreateDate  : 2019/7/31 0031 下午 3:39
      * Description : 默认数据
      */
-    public abstract List<E> fetchDefault(R request);
+    public abstract List<E> fetchDefault(R request) throws Exception;
     
     
     /**
@@ -242,7 +242,12 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
 
         @Override
         public List<E> getEntity(R request) {
-            return fetchDefault(request);
+            try {
+                return fetchDefault(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         @Override
@@ -258,7 +263,12 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
     public class NetworkProvider extends DefaultProvider{
         @Override
         public List<E> getEntity(R request) {
-            return fetchNetwork(request);
+            try {
+                return fetchNetwork(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
     
@@ -270,12 +280,21 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
     public class CacheProvider extends DefaultProvider{
         @Override
         public List<E> getEntity(R request) {
-            return fetchCache(request);
+            try {
+                return fetchCache(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         @Override
         public void setEntity(R request, List<E> entity) {
-            writeCache(request, entity);
+            try {
+                writeCache(request, entity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
