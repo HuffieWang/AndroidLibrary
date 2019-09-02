@@ -3,7 +3,6 @@ package com.musheng.android.fetcher;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -91,7 +90,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * Description : 同步调用支持的数据提供器   
      * @param request : 请求参数，根据需要自行定义
      */
-    public List<E> execute(R request) throws MSEntityThrowable {
+    public E execute(R request) throws MSEntityThrowable {
         
         Collection<MSEntityProvider<R, E>> entityProviders = providerMap.values();
         if(entityProviders.isEmpty()) {
@@ -100,7 +99,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
 
         int index = 0;
         int handleIndex = -1;
-        List<E> entity = null;
+        E entity = null;
         for(MSEntityProvider<R, E> provider : entityProviders){
             
             //当已经获取到数据时，跳过不是强制触发的提供器
@@ -136,9 +135,9 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      */
     public Disposable enqueue(final R request, final MSEntityResponse<R, E> response){
 
-        return Observable.create(new ObservableOnSubscribe<List<E>>() {
+        return Observable.create(new ObservableOnSubscribe<E>() {
             @Override
-            public void subscribe(ObservableEmitter<List<E>> emitter) throws Exception {
+            public void subscribe(ObservableEmitter<E> emitter) throws Exception {
 
                 Collection<MSEntityProvider<R, E>> entityProviders = providerMap.values();
                 if(entityProviders.isEmpty()) {
@@ -148,7 +147,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
                 
                 int index = 0;
                 int handleIndex = -1;
-                List<E> entity = null;
+                E entity = null;
                 for(MSEntityProvider<R, E> provider : entityProviders){
                     
                     //当已经获取到数据时，跳过不是强制触发的提供器
@@ -175,9 +174,9 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
                     }
                 }
             }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<List<E>>() {
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<E>() {
             @Override
-            public void accept(List<E> entity) throws Exception {
+            public void accept(E entity) throws Exception {
                 response.onNext(entity, request);
             }
         }, new Consumer<Throwable>() {
@@ -197,28 +196,28 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * CreateDate  : 2019/7/31 0031 下午 3:39
      * Description : 获取网络数据
      */
-    public abstract List<E> fetchNetwork(R request) throws Exception;
+    public abstract E fetchNetwork(R request) throws Exception;
 
     /**
      * Author      : MuSheng
      * CreateDate  : 2019/7/31 0031 下午 3:43
      * Description : 获取持久化数据    
      */
-    public abstract List<E> fetchCache(R request) throws Exception;
+    public abstract E fetchCache(R request) throws Exception;
 
     /**
      * Author      : MuSheng
      * CreateDate  : 2019/7/31 0031 下午 3:43
      * Description : 将数据持久化   
      */
-    public abstract void writeCache(R request, List<E> entity) throws Exception;
+    public abstract void writeCache(R request, E entity) throws Exception;
 
     /**
      * Author      : MuSheng
      * CreateDate  : 2019/7/31 0031 下午 3:39
      * Description : 默认数据
      */
-    public abstract List<E> fetchDefault(R request) throws Exception;
+    public abstract E fetchDefault(R request) throws Exception;
     
     
     /**
@@ -241,7 +240,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
         }
 
         @Override
-        public List<E> getEntity(R request) {
+        public E getEntity(R request) {
             try {
                 return fetchDefault(request);
             } catch (Exception e) {
@@ -251,7 +250,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
         }
 
         @Override
-        public void setEntity(R request, List<E> entity) {
+        public void setEntity(R request, E entity) {
         }
     }
     
@@ -262,7 +261,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      */
     public class NetworkProvider extends DefaultProvider{
         @Override
-        public List<E> getEntity(R request) {
+        public E getEntity(R request) {
             try {
                 return fetchNetwork(request);
             } catch (Exception e) {
@@ -277,9 +276,10 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * CreateDate  : 2019/7/31 0031 下午 3:19
      * Description : 缓存数据提供器，从数据库、文件等持久化组件获取数据      
      */
-    public class CacheProvider extends DefaultProvider{
+    public class CacheProvider extends DefaultProvider {
+
         @Override
-        public List<E> getEntity(R request) {
+        public E getEntity(R request) {
             try {
                 return fetchCache(request);
             } catch (Exception e) {
@@ -289,7 +289,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
         }
 
         @Override
-        public void setEntity(R request, List<E> entity) {
+        public void setEntity(R request, E entity) {
             try {
                 writeCache(request, entity);
             } catch (Exception e) {

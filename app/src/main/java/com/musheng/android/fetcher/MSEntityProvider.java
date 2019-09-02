@@ -1,7 +1,5 @@
 package com.musheng.android.fetcher;
 
-import java.util.List;
-
 /**
  * Author      : MuSheng
  * CreateDate  : 2019/07/10 17:16
@@ -28,10 +26,10 @@ public interface MSEntityProvider<R extends MSEntityRequest, E> {
      * Author      : MuSheng
      * CreateDate  : 2019/7/19 0019 下午 5:48
      * Description : 获取数据（同步）
-     * @param request : 请求参数（根据需要自行定义），会传入数据提供器的List<E> getEntity(R request)方法
-     * @return : 获取到的数据，即使只有一条数据也封装至List中，当获取失败时返回null
+     * @param request : 请求参数（根据需要自行定义），会传入数据提供器的E getEntity(R request)方法
+     * @return : 获取到的数据
      */
-    List<E> getEntity(R request);
+    E getEntity(R request);
     
     /**
      * Author      : MuSheng
@@ -41,5 +39,5 @@ public interface MSEntityProvider<R extends MSEntityRequest, E> {
      * @param request : 请求参数
      * @param entity : 请求到数据
      */
-    void setEntity(R request, List<E> entity);
+    void setEntity(R request, E entity);
 }
