@@ -143,17 +143,15 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
     public Disposable enqueue(final R request, MSEntityResponse<R, E> response){
 
         isCancel = false;
-
+        responseList.clear();
         responseList.add(response);
+        for(MSEntityResponse<R,E> resp : responseList){
+            resp.onStart();
+        }
 
         return Observable.create(new ObservableOnSubscribe<E>() {
             @Override
             public void subscribe(ObservableEmitter<E> emitter) throws Exception {
-                if(!isCancel){
-                    for(MSEntityResponse<R,E> resp : responseList){
-                        resp.onStart();
-                    }
-                }
                 Collection<MSEntityProvider<R, E>> entityProviders = providerMap.values();
                 if(entityProviders.isEmpty()) {
                     emitter.onError(new MSEntityThrowable( "EntityHandler not found"));
@@ -233,6 +231,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      */
     public void cancel(){
         isCancel = true;
+        responseList.clear();
         for(MSEntityResponse<R,E> resp : responseList){
             resp.onCancel();
         }
