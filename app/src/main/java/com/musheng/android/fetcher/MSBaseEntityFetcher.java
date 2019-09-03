@@ -149,7 +149,11 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
         return Observable.create(new ObservableOnSubscribe<E>() {
             @Override
             public void subscribe(ObservableEmitter<E> emitter) throws Exception {
-
+                if(!isCancel){
+                    for(MSEntityResponse<R,E> resp : responseList){
+                        resp.onStart();
+                    }
+                }
                 Collection<MSEntityProvider<R, E>> entityProviders = providerMap.values();
                 if(entityProviders.isEmpty()) {
                     emitter.onError(new MSEntityThrowable( "EntityHandler not found"));
