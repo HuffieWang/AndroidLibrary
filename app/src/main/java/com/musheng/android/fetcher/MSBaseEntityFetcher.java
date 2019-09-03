@@ -1,8 +1,10 @@
 package com.musheng.android.fetcher;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -20,6 +22,10 @@ import io.reactivex.schedulers.Schedulers;
 public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
 
     private LinkedHashMap<Type, MSEntityProvider<R, E>> providerMap = new LinkedHashMap<>();
+
+    private List<MSEntityResponse<R,E>> responseList = new ArrayList<>();
+
+    private boolean isCancel;
 
     /**
      * Author      : MuSheng
@@ -125,7 +131,8 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
         }
         return entity;
     }
-    
+
+
     /**
      * Author      : MuSheng
      * CreateDate  : 2019/7/19 0019 下午 5:52
@@ -133,7 +140,11 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * @param request : 请求参数，根据需要自行定义
      * @param response : 返回结果，成功和失败都回调在主线程
      */
-    public Disposable enqueue(final R request, final MSEntityResponse<R, E> response){
+    public Disposable enqueue(final R request, MSEntityResponse<R, E> response){
+
+        isCancel = false;
+
+        responseList.add(response);
 
         return Observable.create(new ObservableOnSubscribe<E>() {
             @Override
@@ -177,18 +188,50 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<E>() {
             @Override
             public void accept(E entity) throws Exception {
-                response.onNext(entity, request);
+                if(!isCancel){
+                    for(MSEntityResponse<R,E> resp : responseList){
+                        resp.onNext(entity, request);
+                    }
+                }
             }
         }, new Consumer<Throwable>() {
+
             @Override
             public void accept(Throwable throwable) throws Exception {
-                if(throwable instanceof MSEntityThrowable){
-                    response.onError((MSEntityThrowable)throwable);
-                } else {
-                    response.onError(new MSEntityThrowable(throwable.getMessage()));
+                if(isCancel){
+                    for(MSEntityResponse<R,E> resp : responseList){
+                        if(throwable instanceof MSEntityThrowable){
+                            resp.onError((MSEntityThrowable)throwable);
+                        } else {
+                            resp.onError(new MSEntityThrowable(throwable.getMessage()));
+                        }
+                    }
                 }
             }
         });
+    }
+
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/7/19 0019 下午 5:52
+     * Description : 添加异步请求回调，以满足多个地方需要回调通知的情况
+     * @param response : 返回结果，成功和失败都回调在主线程
+     */
+    public void addEntityResponse(MSEntityResponse<R, E> response){
+        responseList.add(response);
+    }
+
+
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/7/19 0019 下午 5:52
+     * Description : 取消异步请求，并没有真正取消，只是关掉了回调
+     */
+    public void cancel(){
+        isCancel = true;
+        for(MSEntityResponse<R,E> resp : responseList){
+            resp.onCancel();
+        }
     }
 
     /**

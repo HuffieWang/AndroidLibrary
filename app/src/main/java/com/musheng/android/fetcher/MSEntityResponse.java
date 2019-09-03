@@ -8,4 +8,5 @@ package com.musheng.android.fetcher;
 public interface MSEntityResponse<R extends MSEntityRequest, E> {
     void onNext(E entity, R request);
     void onError(MSEntityThrowable error);
+    void onCancel();
 }
