@@ -67,6 +67,22 @@ public class MSLoading {
 
     /**
      * Author      : MuSheng
+     * CreateDate  : 2019/8/7 14:33
+     * Description : 将加载器绑定于指定组件的生命周期，组件类型需要提前在addLifeCycleProvider()注册
+     * @param loading : 初始化好的loading
+     * @param t : 用于绑定生命周期的组件
+     */
+    public static <T> T bindLifeCycle(MSLoading loading, T t){
+        for(MSLoadingLifeCycleProvider provider : lifeCycleProviders){
+            if(provider.isInstance(t)){
+                return (T) provider.create(loading, t);
+            }
+        }
+        return t;
+    }
+
+    /**
+     * Author      : MuSheng
      * CreateDate  : 2019/8/7 14:36
      * Description : 加载提示可以直接实例化使用
      * @param viewGroup : 加载提示显示的位置
