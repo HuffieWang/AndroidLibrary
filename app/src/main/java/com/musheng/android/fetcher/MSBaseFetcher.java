@@ -19,11 +19,11 @@ import io.reactivex.schedulers.Schedulers;
  * CreateDate  : 2019/07/10 17:16
  * Description : 链式数据获取器，可为Entity自定义多种数据提供器（网络、数据库、缓存）
  */
-public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
+public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
 
-    private LinkedHashMap<Type, MSEntityProvider<R, E>> providerMap = new LinkedHashMap<>();
+    private LinkedHashMap<Type, MSFetcherEntityProvider<R, E>> providerMap = new LinkedHashMap<>();
 
-    private List<MSEntityResponse<R,E>> responseList = new ArrayList<>();
+    private List<MSFetcherResponse<R,E>> responseList = new ArrayList<>();
 
     private boolean isCancel;
 
@@ -32,7 +32,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * CreateDate  : 2019/7/31 0031 下午 3:23
      * Description : 默认添加缓存、网络、默认，优先缓存、其次网络，最后默认。    
      */
-    public MSBaseEntityFetcher() {
+    public MSBaseFetcher() {
         providerMap.put(CacheProvider.class, new CacheProvider());
         providerMap.put(NetworkProvider.class, new NetworkProvider());
         providerMap.put(DefaultProvider.class, new DefaultProvider());
@@ -43,7 +43,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * CreateDate  : 2019/7/31 0031 下午 3:22
      * Description : 添加自定义的数据提供器   
      */
-    public MSBaseEntityFetcher<R, E> addProvider(Type type, MSEntityProvider<R, E> provider){
+    public MSBaseFetcher<R, E> addProvider(Type type, MSFetcherEntityProvider<R, E> provider){
         providerMap.put(type, provider);
         return this;
     }
@@ -53,7 +53,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * CreateDate  : 2019/7/31 0031 下午 3:22
      * Description : 移除指定种类的数据提供器   
      */
-    public MSBaseEntityFetcher<R, E> removeProvider(Type type){
+    public MSBaseFetcher<R, E> removeProvider(Type type){
         providerMap.remove(type);
         return this;
     }
@@ -64,8 +64,8 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * Description : 设置数据提供器的调用顺序，未被提及的会被移除
      * @param types : 期望的调用顺序
      */
-    public MSBaseEntityFetcher<R, E> sortProvider(Type... types) {
-        LinkedHashMap<Type, MSEntityProvider<R, E>> temp = new LinkedHashMap<>();
+    public MSBaseFetcher<R, E> sortProvider(Type... types) {
+        LinkedHashMap<Type, MSFetcherEntityProvider<R, E>> temp = new LinkedHashMap<>();
         if(types != null && types.length > 0){
             for (Type type : types) {
                 if (providerMap.containsKey(type)) {
@@ -82,8 +82,8 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * CreateDate  : 2019/7/31 0031 下午 3:32
      * Description :    
      */
-    public MSBaseEntityFetcher<R, E> setProviderForceTrigger(Type type, boolean isForceTrigger){
-        MSEntityProvider<R, E> provider = providerMap.get(type);
+    public MSBaseFetcher<R, E> setProviderForceTrigger(Type type, boolean isForceTrigger){
+        MSFetcherEntityProvider<R, E> provider = providerMap.get(type);
         if(provider != null){
             provider.setForceTrigger(isForceTrigger);
         }
@@ -96,17 +96,17 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * Description : 同步调用支持的数据提供器   
      * @param request : 请求参数，根据需要自行定义
      */
-    public E execute(R request) throws MSEntityThrowable {
+    public E execute(R request) throws MSFetcherThrowable {
         
-        Collection<MSEntityProvider<R, E>> entityProviders = providerMap.values();
+        Collection<MSFetcherEntityProvider<R, E>> entityProviders = providerMap.values();
         if(entityProviders.isEmpty()) {
-            throw new MSEntityThrowable( "EntityHandler not found");
+            throw new MSFetcherThrowable( "EntityHandler not found");
         }
 
         int index = 0;
         int handleIndex = -1;
         E entity = null;
-        for(MSEntityProvider<R, E> provider : entityProviders){
+        for(MSFetcherEntityProvider<R, E> provider : entityProviders){
             
             //当已经获取到数据时，跳过不是强制触发的提供器
             if(entity != null && !provider.isForceTrigger()){
@@ -120,16 +120,27 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
             index++;
         }
         if (entity == null) {
-            throw new MSEntityThrowable( "Entity is null");
+            throw new MSFetcherThrowable( "Entity is null");
         }
         //从最终获取到数据的提供器向前遍历，调用设置数据方法
         index = 0;
-        for(MSEntityProvider<R, E> provider : entityProviders){
+        for(MSFetcherEntityProvider<R, E> provider : entityProviders){
             if(index++ < handleIndex){
                 provider.setEntity(request, entity);
             }
         }
         return entity;
+    }
+
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/7/19 0019 下午 5:52
+     * Description : 异步调用支持的数据提供器，结果回调在主线程
+     * @param request : 请求参数，根据需要自行定义
+     * @param response : 返回结果，成功和失败都回调在主线程
+     */
+    public Disposable enqueue(final R request, final MSFetcherResponse<R, E> response){
+        return enqueue(request, response, null);
     }
 
 
@@ -139,12 +150,13 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * Description : 异步调用支持的数据提供器，结果回调在主线程
      * @param request : 请求参数，根据需要自行定义
      * @param response : 返回结果，成功和失败都回调在主线程
+     * @param indicator : 指示器，可以控制请求是否被取消
      */
-    public Disposable enqueue(final R request, final MSEntityResponse<R, E> response){
+    public Disposable enqueue(final R request, final MSFetcherResponse<R, E> response, final MSFetcherIndicator indicator){
 
         isCancel = false;
 
-        for(MSEntityResponse<R,E> resp : responseList){
+        for(MSFetcherResponse<R,E> resp : responseList){
             resp.onStart();
         }
         response.onStart();
@@ -152,16 +164,16 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
         return Observable.create(new ObservableOnSubscribe<E>() {
             @Override
             public void subscribe(ObservableEmitter<E> emitter) throws Exception {
-                Collection<MSEntityProvider<R, E>> entityProviders = providerMap.values();
+                Collection<MSFetcherEntityProvider<R, E>> entityProviders = providerMap.values();
                 if(entityProviders.isEmpty()) {
-                    emitter.onError(new MSEntityThrowable( "EntityHandler not found"));
+                    emitter.onError(new MSFetcherThrowable( "EntityHandler not found"));
                     return;
                 }
                 
                 int index = 0;
                 int handleIndex = -1;
                 E entity = null;
-                for(MSEntityProvider<R, E> provider : entityProviders){
+                for(MSFetcherEntityProvider<R, E> provider : entityProviders){
                     
                     //当已经获取到数据时，跳过不是强制触发的提供器
                     if(entity != null && !provider.isForceTrigger()){
@@ -175,13 +187,13 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
                     index++;
                 }
                 if (entity == null) {
-                    emitter.onError(new MSEntityThrowable( "Entity is null"));
+                    emitter.onError(new MSFetcherThrowable( "Entity is null"));
                     return;
                 }
                 
                 //从最终获取到数据的提供器向前遍历，调用设置数据方法
                 index = 0;
-                for(MSEntityProvider<R, E> provider : entityProviders){
+                for(MSFetcherEntityProvider<R, E> provider : entityProviders){
                     if(index++ < handleIndex){
                         provider.setEntity(request, entity);
                     }
@@ -190,8 +202,8 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<E>() {
             @Override
             public void accept(E entity) throws Exception {
-                if(!isCancel){
-                    for(MSEntityResponse<R,E> resp : responseList){
+                if(!isCancel && (indicator == null || !indicator.isCancel())){
+                    for(MSFetcherResponse<R,E> resp : responseList){
                         resp.onNext(entity, request);
                     }
                     response.onNext(entity, request);
@@ -201,14 +213,14 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
 
             @Override
             public void accept(Throwable throwable) throws Exception {
-                if(isCancel){
-                    for(MSEntityResponse<R,E> resp : responseList){
-                        if(throwable instanceof MSEntityThrowable){
-                            resp.onError((MSEntityThrowable)throwable);
-                            response.onError((MSEntityThrowable)throwable);
+                if(!isCancel && (indicator == null || !indicator.isCancel())){
+                    for(MSFetcherResponse<R,E> resp : responseList){
+                        if(throwable instanceof MSFetcherThrowable){
+                            resp.onError((MSFetcherThrowable)throwable);
+                            response.onError((MSFetcherThrowable)throwable);
                         } else {
-                            resp.onError(new MSEntityThrowable(throwable.getMessage()));
-                            response.onError(new MSEntityThrowable(throwable.getMessage()));
+                            resp.onError(new MSFetcherThrowable(throwable.getMessage()));
+                            response.onError(new MSFetcherThrowable(throwable.getMessage()));
                         }
                     }
                 }
@@ -222,7 +234,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * Description : 添加异步请求回调，以满足多个地方需要回调通知的情况
      * @param response : 返回结果，成功和失败都回调在主线程
      */
-    public void addEntityResponse(MSEntityResponse<R, E> response){
+    public void addEntityResponse(MSFetcherResponse<R, E> response){
         responseList.add(response);
     }
 
@@ -232,7 +244,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * Description : 移除额外添加的异步请求回调
      * @param response : 返回结果，成功和失败都回调在主线程
      */
-    public void removeEntityResponse(MSEntityResponse<R, E> response){
+    public void removeEntityResponse(MSFetcherResponse<R, E> response){
         responseList.remove(response);
     }
 
@@ -252,10 +264,10 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      */
     public void cancel(){
         isCancel = true;
-        responseList.clear();
-        for(MSEntityResponse<R,E> resp : responseList){
+        for(MSFetcherResponse<R,E> resp : responseList){
             resp.onCancel();
         }
+        responseList.clear();
     }
 
     /**
@@ -292,7 +304,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * CreateDate  : 2019/7/19 0019 下午 5:54
      * Description : 默认数据提供器，推荐扩展时继承，可省去写isForceTrigger()等实现和泛型<R,E>的代码      
      */
-    public class DefaultProvider implements MSEntityProvider<R, E> {
+    public class DefaultProvider implements MSFetcherEntityProvider<R, E> {
 
         private boolean isForceTrigger;
 

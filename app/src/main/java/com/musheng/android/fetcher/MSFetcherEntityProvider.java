@@ -5,7 +5,7 @@ package com.musheng.android.fetcher;
  * CreateDate  : 2019/07/10 17:16
  * Description : 数据提供器
  */
-public interface MSEntityProvider<R extends MSEntityRequest, E> {
+public interface MSFetcherEntityProvider<R extends MSFetcherRequest, E> {
     
     /**
      * Author      : MuSheng
