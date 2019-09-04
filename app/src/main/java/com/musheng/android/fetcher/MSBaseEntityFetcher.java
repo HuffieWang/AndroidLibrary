@@ -140,14 +140,14 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
      * @param request : 请求参数，根据需要自行定义
      * @param response : 返回结果，成功和失败都回调在主线程
      */
-    public Disposable enqueue(final R request, MSEntityResponse<R, E> response){
+    public Disposable enqueue(final R request, final MSEntityResponse<R, E> response){
 
         isCancel = false;
-        responseList.clear();
-        responseList.add(response);
+
         for(MSEntityResponse<R,E> resp : responseList){
             resp.onStart();
         }
+        response.onStart();
 
         return Observable.create(new ObservableOnSubscribe<E>() {
             @Override
@@ -194,6 +194,7 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
                     for(MSEntityResponse<R,E> resp : responseList){
                         resp.onNext(entity, request);
                     }
+                    response.onNext(entity, request);
                 }
             }
         }, new Consumer<Throwable>() {
@@ -204,8 +205,10 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
                     for(MSEntityResponse<R,E> resp : responseList){
                         if(throwable instanceof MSEntityThrowable){
                             resp.onError((MSEntityThrowable)throwable);
+                            response.onError((MSEntityThrowable)throwable);
                         } else {
                             resp.onError(new MSEntityThrowable(throwable.getMessage()));
+                            response.onError(new MSEntityThrowable(throwable.getMessage()));
                         }
                     }
                 }
@@ -223,6 +226,24 @@ public abstract class MSBaseEntityFetcher<R extends MSEntityRequest, E> {
         responseList.add(response);
     }
 
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/7/19 0019 下午 5:52
+     * Description : 移除额外添加的异步请求回调
+     * @param response : 返回结果，成功和失败都回调在主线程
+     */
+    public void removeEntityResponse(MSEntityResponse<R, E> response){
+        responseList.remove(response);
+    }
+
+    /**
+     * Author      : MuSheng
+     * CreateDate  : 2019/7/19 0019 下午 5:52
+     * Description : 移除所有额外添加的异步请求回调
+     */
+    public void removeAllEntityResponse(){
+        responseList.clear();
+    }
 
     /**
      * Author      : MuSheng
