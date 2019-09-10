@@ -1,6 +1,7 @@
 package com.musheng.android.view.loading;
 
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Author      : MuSheng
@@ -13,5 +14,5 @@ public interface MSLoadingViewProvider {
       * CreateDate  : 2019/8/7 14:47
       * Description : 创建自定义的View，推荐将layout设置背景色，并将长宽设置为MATCH_PARENT
       */
-     View createView();
+     View createView(ViewGroup viewGroup);
 }

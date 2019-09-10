@@ -100,7 +100,7 @@ public class MSLoading {
         ViewGroup viewGroup = viewGroupWeakReference.get();
         if(viewGroup != null){
             if (contentProvider != null){
-                loadingView = contentProvider.createView();
+                loadingView = contentProvider.createView(viewGroup);
                 viewGroup.addView(loadingView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             } else {
                 RelativeLayout layout = new RelativeLayout(viewGroup.getContext());
