@@ -214,13 +214,16 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
             @Override
             public void accept(Throwable throwable) throws Exception {
                 if(!isCancel && (indicator == null || !indicator.isCancel())){
+                    if(throwable instanceof MSFetcherThrowable){
+                        response.onError((MSFetcherThrowable)throwable);
+                    } else {
+                        response.onError(new MSFetcherThrowable(throwable.getMessage()));
+                    }
                     for(MSFetcherResponse<R,E> resp : responseList){
                         if(throwable instanceof MSFetcherThrowable){
                             resp.onError((MSFetcherThrowable)throwable);
-                            response.onError((MSFetcherThrowable)throwable);
                         } else {
                             resp.onError(new MSFetcherThrowable(throwable.getMessage()));
-                            response.onError(new MSFetcherThrowable(throwable.getMessage()));
                         }
                     }
                 }
