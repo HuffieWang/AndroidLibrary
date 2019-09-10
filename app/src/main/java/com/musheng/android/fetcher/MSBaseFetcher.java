@@ -112,8 +112,12 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
             if(entity != null && !provider.isForceTrigger()){
                 continue;
             }
-            entity = provider.getEntity(request);
-            
+            try {
+                entity = provider.getEntity(request);
+            } catch (Exception e) {
+               throw new MSFetcherThrowable(e.getMessage());
+            }
+
             if(entity != null){
                 handleIndex = index;
             }
@@ -322,13 +326,8 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
         }
 
         @Override
-        public E getEntity(R request) {
-            try {
-                return fetchDefault(request);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
+        public E getEntity(R request) throws Exception{
+            return fetchDefault(request);
         }
 
         @Override
@@ -343,13 +342,8 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
      */
     public class NetworkProvider extends DefaultProvider{
         @Override
-        public E getEntity(R request) {
-            try {
-                return fetchNetwork(request);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
+        public E getEntity(R request) throws Exception{
+            return fetchNetwork(request);
         }
     }
     
@@ -361,13 +355,8 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
     public class CacheProvider extends DefaultProvider {
 
         @Override
-        public E getEntity(R request) {
-            try {
-                return fetchCache(request);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
+        public E getEntity(R request) throws Exception{
+            return fetchCache(request);
         }
 
         @Override

@@ -29,7 +29,7 @@ public interface MSFetcherEntityProvider<R extends MSFetcherRequest, E> {
      * @param request : 请求参数（根据需要自行定义），会传入数据提供器的E getEntity(R request)方法
      * @return : 获取到的数据
      */
-    E getEntity(R request);
+    E getEntity(R request) throws Exception;
     
     /**
      * Author      : MuSheng
