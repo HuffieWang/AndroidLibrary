@@ -99,6 +99,10 @@ public class MSLoading {
     public void show(){
         ViewGroup viewGroup = viewGroupWeakReference.get();
         if(viewGroup != null){
+            if(loadingView != null){
+                viewGroup.removeView(loadingView);
+                loadingView = null;
+            }
             if (contentProvider != null){
                 loadingView = contentProvider.createView(viewGroup);
                 viewGroup.addView(loadingView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -127,6 +131,7 @@ public class MSLoading {
         ViewGroup viewGroup = viewGroupWeakReference.get();
         if(viewGroup != null && loadingView != null){
             viewGroup.removeView(loadingView);
+            loadingView = null;
         }
     }
 }
