@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -151,6 +152,7 @@ public class MSTile extends LinearLayout {
             boolean isBold = array.getBoolean(R.styleable.MSTile_ms_tile_mid_text_bold, false);
             int background = array.getResourceId(R.styleable.MSTile_ms_tile_mid_text_background, -1);
             float marginEnd = array.getDimension(R.styleable.MSTile_ms_tile_mid_text_margin_end, -1);
+            boolean gravityCenter = array.getBoolean(R.styleable.MSTile_ms_tile_mid_text_gravity_center, false);
             midContent.setText(content);
             midContent.setTextColor(color);
             if(size != -1){
@@ -167,6 +169,7 @@ public class MSTile extends LinearLayout {
                 layoutParams.setMarginEnd((int) marginEnd);
                 midContent.setLayoutParams(layoutParams);
             }
+            midContent.setGravity(gravityCenter ? Gravity.CENTER : Gravity.CENTER_VERTICAL);
         }
 
         if(array.hasValue(R.styleable.MSTile_ms_tile_mid_second_text)){
@@ -178,6 +181,7 @@ public class MSTile extends LinearLayout {
             boolean isBold = array.getBoolean(R.styleable.MSTile_ms_tile_mid_second_text_bold, false);
             int background = array.getResourceId(R.styleable.MSTile_ms_tile_mid_second_text_background, -1);
             float marginEnd = array.getDimension(R.styleable.MSTile_ms_tile_mid_second_text_margin_end, -1);
+            boolean gravityCenter = array.getBoolean(R.styleable.MSTile_ms_tile_mid_text_gravity_center, false);
             midSecondContent.setText(content);
             midSecondContent.setTextColor(color);
             if(size != -1){
@@ -194,6 +198,7 @@ public class MSTile extends LinearLayout {
                 layoutParams.setMarginEnd((int) marginEnd);
                 midSecondContent.setLayoutParams(layoutParams);
             }
+            midSecondContent.setGravity(gravityCenter ? Gravity.CENTER : Gravity.CENTER_VERTICAL);
         }
 
         if(array.hasValue(R.styleable.MSTile_ms_tile_mid_input) || array.hasValue(R.styleable.MSTile_ms_tile_mid_input_hint)){
@@ -201,6 +206,7 @@ public class MSTile extends LinearLayout {
             String content = array.getString(R.styleable.MSTile_ms_tile_mid_input);
             String hint = array.getString(R.styleable.MSTile_ms_tile_mid_input_hint);
             int color = array.getColor(R.styleable.MSTile_ms_tile_mid_input_color, Color.parseColor("#000000"));
+            int hintColor = array.getColor(R.styleable.MSTile_ms_tile_mid_input_hint_color, -1);
             float size = array.getDimension(R.styleable.MSTile_ms_tile_mid_input_size, -1);
             boolean isBold = array.getBoolean(R.styleable.MSTile_ms_tile_mid_input_bold, false);
             int background = array.getResourceId(R.styleable.MSTile_ms_tile_mid_input_background, -1);
@@ -221,6 +227,9 @@ public class MSTile extends LinearLayout {
                 LayoutParams layoutParams = new LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
                 layoutParams.setMarginEnd((int) marginEnd);
                 midInput.setLayoutParams(layoutParams);
+            }
+            if(hintColor != -1){
+                midInput.setHintTextColor(hintColor);
             }
         }
 

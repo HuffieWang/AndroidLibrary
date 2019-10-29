@@ -142,6 +142,7 @@
         <attr name="ms_tile_mid_text_bold" format="boolean" />
         <attr name="ms_tile_mid_text_background" format="reference" />
         <attr name="ms_tile_mid_text_margin_end" format="dimension" />
+        <attr name="ms_tile_mid_text_gravity_center" format="boolean" />
 
         <!-- 中间第二行文本 -->
         <attr name="ms_tile_mid_second_text" format="string|reference" />
@@ -150,10 +151,12 @@
         <attr name="ms_tile_mid_second_text_bold" format="boolean" />
         <attr name="ms_tile_mid_second_text_background" format="reference" />
         <attr name="ms_tile_mid_second_text_margin_end" format="dimension" />
+        <attr name="ms_tile_mid_second_text_gravity_center" format="boolean" />
 
         <!-- 中间输入框 -->
         <attr name="ms_tile_mid_input" format="string|reference" />
         <attr name="ms_tile_mid_input_hint" format="string|reference" />
+        <attr name="ms_tile_mid_input_hint_color" format="color" />
         <attr name="ms_tile_mid_input_size" format="dimension" />
         <attr name="ms_tile_mid_input_color" format="color" />
         <attr name="ms_tile_mid_input_bold" format="boolean" />

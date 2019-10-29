@@ -21,6 +21,11 @@ import com.musheng.android.library.R;
  */
 public class MSTopBar extends RelativeLayout {
 
+    public static int layoutId = 0;
+    public static int backImageResourceId = 0;
+    public static int titleTextResourceId = 0;
+    public static int cornerTextResourceId = 0;
+
     private Context context;
     private MSTextView cornerText;
     private MSTextView titleText;
@@ -110,18 +115,22 @@ public class MSTopBar extends RelativeLayout {
     }
 
     public int getLayoutResourceId(){
-        return 0;
+        return layoutId;
     }
 
     public int getBackImageResourceId(){
-        return 0;
+        return backImageResourceId;
     }
 
     public int getTitleTextResourceId(){
-        return 0;
+        return titleTextResourceId;
     }
 
     public int getCornerTextResourceId(){
-        return 0;
+        return cornerTextResourceId;
+    }
+
+    public MSTextView getTitleText() {
+        return titleText;
     }
 }
