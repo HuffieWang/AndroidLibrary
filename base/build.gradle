@@ -1,0 +1,62 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //Common lib
+    api 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    api 'com.alibaba:arouter-api:1.4.1'
+    annotationProcessor "com.alibaba:arouter-compiler:1.2.2"
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.google.code.gson:gson:2.8.5'
+    api 'com.github.xuexiangjys:XUpdate:1.0.9'
+    api 'com.zhy:okhttputils:2.6.2'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    api 'com.tencent:mmkv:1.0.23'
+    api 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.3.0'
+    api 'cn.yipianfengye.android:zxing-library:2.2'
+    api 'pub.devrel:easypermissions:3.0.0'
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+
+    //Common view
+    api 'com.github.bumptech.glide:glide:4.9.0'
+    api 'com.github.HuffieWang:banner:1.0.3'
+    api 'com.jaeger.statusbarutil:library:1.5.1'
+    api 'com.github.HuffieWang:FlycoTabLayout:3.0.1'
+    api 'com.github.razerdp:BasePopup:2.2.1'
+    api 'com.contrarywind:Android-PickerView:4.1.8'
+    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-16'
+    api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-16'
+    api 'androidx.legacy:legacy-support-v4:1.0.0'
+    api 'liji.library.dev:citypickerview:4.3.2'
+}

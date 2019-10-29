@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MSTextView">
+        <!-- 第三方字体/assets/fonts/文件名.后缀名 -->
+        <attr name="ms_font" format="string|reference" />
+        <!-- 跑马灯，默认不开启 -->
+        <attr name="ms_text_marquee" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="MSEditText">
+
+        <!-- 第三方字体/assets/fonts/文件名.后缀名 -->
+        <attr name="ms_edit_font" format="string|reference" />
+        <!-- 是否显示背景，默认不显示 -->
+        <attr name="ms_edit_bg_enable" format="boolean" />
+
+        <!-- 正则输入限制条件（优先级高于快捷类型） -->
+        <attr name="ms_edit_pattern" format="string|reference" />
+        <!-- 小数位数（优先级高于快捷类型） -->
+        <attr name="ms_edit_scale" format="integer" />
+
+        <!-- 快捷类型-手机号 11位数字 -->
+        <attr name="ms_edit_type_phone" format="boolean" />
+        <!-- 快捷类型-验证码 6位数字 -->
+        <attr name="ms_edit_type_verify_code" format="boolean" />
+        <!-- 快捷类型-账号 20位数字字母组合 -->
+        <attr name="ms_edit_type_account" format="boolean" />
+        <!-- 快捷类型-密码 15位数字字母组合 密文-->
+        <attr name="ms_edit_type_password" format="boolean" />
+        <!-- 快捷类型-支付密码 6位数字 密文-->
+        <attr name="ms_edit_type_pay_password" format="boolean" />
+        <!-- 快捷类型-数字资产 30位数字 8位小数-->
+        <attr name="ms_edit_type_token" format="boolean" />
+        <!-- 快捷类型-人民币资产 30位数字 2位小数-->
+        <attr name="ms_edit_type_cny" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="MSTopBar">
+        <!-- 标题 -->
+        <attr name="ms_top_title" format="string|reference" />
+        <!-- 标题颜色 -->
+        <attr name="ms_top_title_color" format="color" />
+        <!-- 右上角TextButton的文字 -->
+        <attr name="ms_top_corner" format="string|reference" />
+        <!-- 返回按钮的图片 -->
+        <attr name="ms_top_icon" format="reference" />
+        <!-- 隐藏返回按钮，默认不隐藏 -->
+        <attr name="ms_top_hide_icon" format="boolean" />
+        <!-- 自动向上填充手机状态栏的高度 -->
+        <attr name="ms_top_padding_status" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="MSRelativeLayout">
+        <!-- 背景颜色，默认白色 -->
+        <attr name="ms_rl_shadow_background_color" format="color" />
+        <!-- 背景圆角角度 -->
+        <attr name="ms_rl_shadow_background_radius" format="dimension" />
+        <!-- 投影颜色，默认灰色 -->
+        <attr name="ms_rl_shadow_color" format="color" />
+        <!-- 投影强度 -->
+        <attr name="ms_rl_shadow_radius" format="dimension" />
+        <!-- 投影纵向偏移 -->
+        <attr name="ms_rl_shadow_offset_x" format="dimension" />
+        <!-- 投影横向偏移 -->
+        <attr name="ms_rl_shadow_offset_y" format="dimension" />
+        <!-- 隐藏左边投影，默认不隐藏 -->
+        <attr name="ms_rl_shadow_hide_left" format="boolean" />
+        <!-- 隐藏上边投影 -->
+        <attr name="ms_rl_shadow_hide_top" format="boolean" />
+        <!-- 隐藏右边投影 -->
+        <attr name="ms_rl_shadow_hide_right" format="boolean" />
+        <!-- 隐藏下边投影 -->
+        <attr name="ms_rl_shadow_hide_bottom" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="MSLinearLayout">
+        <!-- 背景颜色，默认白色 -->
+        <attr name="ms_ll_shadow_background_color" format="color" />
+        <!-- 背景圆角角度 -->
+        <attr name="ms_ll_shadow_background_radius" format="dimension" />
+        <!-- 投影颜色，默认灰色 -->
+        <attr name="ms_ll_shadow_color" format="color" />
+        <!-- 投影强度 -->
+        <attr name="ms_ll_shadow_radius" format="dimension" />
+        <!-- 投影纵向偏移 -->
+        <attr name="ms_ll_shadow_offset_x" format="dimension" />
+        <!-- 投影横向偏移 -->
+        <attr name="ms_ll_shadow_offset_y" format="dimension" />
+        <!-- 隐藏左边投影，默认不隐藏 -->
+        <attr name="ms_ll_shadow_hide_left" format="boolean" />
+        <!-- 隐藏上边投影 -->
+        <attr name="ms_ll_shadow_hide_top" format="boolean" />
+        <!-- 隐藏右边投影 -->
+        <attr name="ms_ll_shadow_hide_right" format="boolean" />
+        <!-- 隐藏下边投影 -->
+        <attr name="ms_ll_shadow_hide_bottom" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="MSRecyclerView">
+        <!-- 设置横向，默认纵向 -->
+        <attr name="ms_rv_horizontal" format="boolean" />
+        <!-- 设置Grid布局每行显示的个数 -->
+        <attr name="ms_rv_horizontal_count" format="integer" />
+    </declare-styleable>
+
+
+    <declare-styleable name="MSTile">
+
+        <!-- 水平Padding -->
+        <attr name="ms_tile_padding_horizontal" format="dimension" />
+
+        <!-- 垂直Padding -->
+        <attr name="ms_tile_padding_vertical" format="dimension" />
+
+        <!-- 左侧图标 -->
+        <attr name="ms_tile_left_icon" format="reference" />
+        <attr name="ms_tile_left_icon_width" format="dimension" />
+        <attr name="ms_tile_left_icon_height" format="dimension" />
+        <attr name="ms_tile_left_icon_margin_end" format="dimension" />
+
+        <!-- 左侧文本 -->
+        <attr name="ms_tile_left_text" format="string|reference" />
+        <attr name="ms_tile_left_text_size" format="dimension" />
+        <attr name="ms_tile_left_text_color" format="color" />
+        <attr name="ms_tile_left_text_bold" format="boolean" />
+        <attr name="ms_tile_left_text_background" format="color|reference" />
+        <attr name="ms_tile_left_text_margin_end" format="dimension" />
+
+        <!-- 左侧第二行文本 -->
+        <attr name="ms_tile_left_second_text" format="string|reference" />
+        <attr name="ms_tile_left_second_text_size" format="dimension" />
+        <attr name="ms_tile_left_second_text_color" format="color" />
+        <attr name="ms_tile_left_second_text_bold" format="boolean" />
+        <attr name="ms_tile_left_second_text_background" format="color|reference" />
+        <attr name="ms_tile_left_second_text_margin_end" format="dimension" />
+
+        <!-- 中间文本 -->
+        <attr name="ms_tile_mid_text" format="string|reference" />
+        <attr name="ms_tile_mid_text_size" format="dimension" />
+        <attr name="ms_tile_mid_text_color" format="color" />
+        <attr name="ms_tile_mid_text_bold" format="boolean" />
+        <attr name="ms_tile_mid_text_background" format="reference" />
+        <attr name="ms_tile_mid_text_margin_end" format="dimension" />
+
+        <!-- 中间第二行文本 -->
+        <attr name="ms_tile_mid_second_text" format="string|reference" />
+        <attr name="ms_tile_mid_second_text_size" format="dimension" />
+        <attr name="ms_tile_mid_second_text_color" format="color" />
+        <attr name="ms_tile_mid_second_text_bold" format="boolean" />
+        <attr name="ms_tile_mid_second_text_background" format="reference" />
+        <attr name="ms_tile_mid_second_text_margin_end" format="dimension" />
+
+        <!-- 中间输入框 -->
+        <attr name="ms_tile_mid_input" format="string|reference" />
+        <attr name="ms_tile_mid_input_hint" format="string|reference" />
+        <attr name="ms_tile_mid_input_size" format="dimension" />
+        <attr name="ms_tile_mid_input_color" format="color" />
+        <attr name="ms_tile_mid_input_bold" format="boolean" />
+        <attr name="ms_tile_mid_input_background" format="reference" />
+        <attr name="ms_tile_mid_input_margin_end" format="dimension" />
+
+        <!-- 右侧文本 -->
+        <attr name="ms_tile_right_text" format="string|reference" />
+        <attr name="ms_tile_right_text_size" format="dimension" />
+        <attr name="ms_tile_right_text_color" format="color" />
+        <attr name="ms_tile_right_text_bold" format="boolean" />
+        <attr name="ms_tile_right_text_background" format="reference" />
+        <attr name="ms_tile_right_text_margin_end" format="dimension" />
+
+        <!-- 右侧图标 -->
+        <attr name="ms_title_right_icon_fill" format="boolean"/>
+        <attr name="ms_tile_right_icon" format="reference" />
+        <attr name="ms_tile_right_icon_width" format="dimension" />
+        <attr name="ms_tile_right_icon_height" format="dimension" />
+        <attr name="ms_tile_right_icon_margin_end" format="dimension" />
+
+        <!-- 底部分割线 -->
+        <attr name="ms_tile_bottom_div_height" format="dimension" />
+        <attr name="ms_tile_bottom_div_color" format="color" />
+        <attr name="ms_tile_bottom_div_margin_start" format="dimension" />
+        <attr name="ms_tile_bottom_div_margin_end" format="dimension" />
+
+    </declare-styleable>
+</resources>
