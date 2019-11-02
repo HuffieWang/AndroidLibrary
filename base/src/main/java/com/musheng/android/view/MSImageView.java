@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 /**
@@ -49,5 +50,11 @@ public class MSImageView extends AppCompatImageView {
         rotate.setFillAfter(true);
         rotate.setStartOffset(10);
         setAnimation(rotate);
+    }
+
+    public void loadRound(String url, int radius){
+        RoundedCorners roundedCorners = new RoundedCorners(radius);
+        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+        Glide.with(this).load(url).apply(options).into(this);
     }
 }
