@@ -133,18 +133,18 @@ public class ContractProcessor {
                             "            }\n\n";
 
             if(isNotTextEmpty(itemEntity)){
-            result +=
-                            "            @Override\n" +
-                            "            public List getList(" + entity +" refreshEntity) {\n" +
-                            "                return null;\n" +
-                            "            }\n\n" +
-                            "            @Override\n" +
-                            "            public int getTotalCount(" + entity + " refreshEntity) {\n" +
-                            "                return 0;\n" +
-                            "            }\n" ;
+                result +=
+                        "            @Override\n" +
+                                "            public List getList(" + entity +" refreshEntity) {\n" +
+                                "                return null;\n" +
+                                "            }\n\n" +
+                                "            @Override\n" +
+                                "            public int getTotalCount(" + entity + " refreshEntity) {\n" +
+                                "                return 0;\n" +
+                                "            }\n" ;
             }
             result +=
-                            "        });\n" +
+                    "        });\n" +
                             "    }\n" ;
         }
         result += "}\n";
@@ -223,7 +223,7 @@ public class ContractProcessor {
                 "import com.alibaba.android.arouter.facade.annotation.Route;\n\n" +
                 "@Route(path = " + baseName + "Router.PATH)\n"+
                 "public class " + baseName + "Activity extends BaseActivity<" + className + ".Presenter> implements "+ className + ".View {\n\n" +
-                    content +
+                content +
                 "}\n";
         writer.write(builder);
         writer.flush();
@@ -272,7 +272,7 @@ public class ContractProcessor {
 
                 + createMethod("    ",new String[]{"@Override"}, "View",
                 "getRootView", new String[]{"LayoutInflater inflater", "ViewGroup container", "Bundle savedInstanceState"},
-                null,"        return inflater.inflate(R.layout.fragment_" + baseName.toLowerCase() + ", null);")
+                null,"        return inflater.inflate(R.layout.fragment_" + baseName.toLowerCase() + ", container, false);")
 
                 + createMethod("    ",new String[]{"@Override"}, "void",
                 "initWidget", null, null, initWight);
@@ -323,7 +323,7 @@ public class ContractProcessor {
                 +"    android:background=\"@color/white\"\n"
                 +"    android:layout_width=\"match_parent\"\n"
                 +"    android:layout_height=\"match_parent\">\n\n"
-                +"    <com.musheng.android.view.MSTopBar\n"
+                +"    <com.lianhe.app.mall.view.MSTopBar\n"
                 +"        android:id=\"@+id/top_" + baseName.toLowerCase() +"\"\n"
                 +"        android:layout_width=\"match_parent\"\n"
                 +"        android:layout_height=\"wrap_content\"\n"

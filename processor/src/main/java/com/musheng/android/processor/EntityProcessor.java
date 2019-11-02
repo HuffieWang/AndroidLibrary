@@ -22,6 +22,7 @@ import static com.musheng.android.processor.MSProcessor.createMethod;
 import static com.musheng.android.processor.MSProcessor.createObject;
 import static com.musheng.android.processor.MSProcessor.createPackage;
 import static com.musheng.android.processor.MSProcessor.createParams;
+import static com.musheng.android.processor.MSProcessor.isNotTextEmpty;
 
 /**
  * Author      : MuSheng
@@ -56,7 +57,7 @@ public class EntityProcessor {
             writeResponse(packageName, className, fileDir, annotation.response(), annotation.forceBuildResponse());
             if(annotation.post()){
                 String baseName = methodElement.toString().replaceAll("\\(\\)", "").replaceAll("/","_");
-                writeFetcher(packageName, className, fileDir, annotation.response(), baseName, annotation.request().length > 0,  annotation.forceBuildFetcher());
+                writeFetcher(packageName, className, fileDir, annotation.response(), baseName,  annotation.encrypt(),annotation.request().length > 0,  annotation.forceBuildFetcher());
                 writeRequest(packageName, className, fileDir, annotation.request(),  annotation.forceBuildRequest());
             }
         } catch (IOException e) {
@@ -92,7 +93,7 @@ public class EntityProcessor {
         writer.close();
     }
 
-    private void writeFetcher(String packageName, String className,  String dir, String[] params, String baseName, boolean hasRequestBody, boolean forceBuild) throws IOException{
+    private void writeFetcher(String packageName, String className,  String dir, String[] params, String baseName, String encrypt, boolean hasRequestBody, boolean forceBuild) throws IOException{
         String fileName = className + "Fetcher.java";
         String path = dir + fileName;
         String simpleName = className + "Fetcher";
@@ -104,7 +105,14 @@ public class EntityProcessor {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
         String padding = "        ";
-        String defaultContent = padding + "return ((Api)MSRetrofit.getApi())." + baseName + (hasRequestBody ? "(request)" : "()") + ".execute().body();";
+
+        String defaultContent = "";
+        if(isNotTextEmpty(encrypt)){
+            defaultContent = padding + "return ((Api)MSRetrofit.getApi())." + baseName + (hasRequestBody ? ("(new "+ encrypt +"(request.toJSONString()))") : "()") + ".execute().body();";
+        } else {
+            defaultContent = padding + "return ((Api)MSRetrofit.getApi())." + baseName + (hasRequestBody ? ("(request)") : "()") + ".execute().body();";
+        }
+
         String debugContent = createObject("            ", className, params);
         String content = padding + "if(ServerConfig.IS_LOCAL_DEBUG){\n";
         content += padding + "    Thread.sleep(1000);\n";
@@ -154,9 +162,15 @@ public class EntityProcessor {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         String builder = createPackage(packageName)
                 + createImport("com.musheng.android.fetcher.MSFetcherRequest")
+                + createImport("com.google.gson.Gson")
                 + createClass("", "public class", simpleName,null, createParams("    ", params)
                         + createConstructor("    ", simpleName, params, "")
-                        + createGetterAndSetter("    ", params),
+                        + createGetterAndSetter("    ", params)
+                        + "    public String toJSONString(){\n" +
+                        "        Gson gson = new Gson();\n" +
+                        "        return gson.toJson(this);\n" +
+                        "    }"
+                ,
                 new String[]{"MSFetcherRequest"});
         writer.write(builder);
         writer.flush();
@@ -176,11 +190,16 @@ public class EntityProcessor {
                 continue;
             }
             String name = annotation.name();
+            String encrypt = annotation.encrypt();
             String url = element.toString().replaceAll("\\(\\)", "").replaceAll("_", "/");
-            content.append("    @POST(\"/").append(url).append("\")\n");
+            content.append("    @POST(\"/").append(url + ".do").append("\")\n");
             content.append("    Call<").append(name).append("> ").append(url.replaceAll("/", "_"));
             if(annotation.request().length > 0){
-                content.append("(@Body ").append(name).append("Request param);");
+                if(isNotTextEmpty(encrypt)){
+                    content.append("(@Body ").append(encrypt).append(" encrypt);");
+                } else {
+                    content.append("(@Body ").append(name).append("Request param);");
+                }
             } else {
                 content.append("();");
             }

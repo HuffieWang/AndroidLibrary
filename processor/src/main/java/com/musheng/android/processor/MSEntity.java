@@ -10,6 +10,7 @@ public @interface MSEntity {
     boolean post() default true;
     String[] request() default {};
     String[] response();
+    String encrypt() default "";
     boolean forceBuildRequest() default false;
     boolean forceBuildResponse() default false;
     boolean forceBuildFetcher() default false;
