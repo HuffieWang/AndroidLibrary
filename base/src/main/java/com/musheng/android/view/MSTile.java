@@ -78,11 +78,15 @@ public class MSTile extends LinearLayout {
             int resourceId = array.getResourceId(R.styleable.MSTile_ms_tile_left_icon, -1);
             float width = array.getDimension(R.styleable.MSTile_ms_tile_left_icon_width, WRAP_CONTENT);
             float height = array.getDimension(R.styleable.MSTile_ms_tile_left_icon_height, WRAP_CONTENT);
+            float marginStart = array.getDimension(R.styleable.MSTile_ms_tile_left_icon_margin_start, -1);
             float marginEnd = array.getDimension(R.styleable.MSTile_ms_tile_left_icon_margin_end, -1);
             if(resourceId != -1){
                 leftIcon.setImageResource(resourceId);
             }
             LayoutParams layoutParams = new LayoutParams((int) width, (int) height);
+            if(marginStart != -1){
+                layoutParams.setMarginStart((int)marginStart);
+            }
             if(marginEnd != -1){
                 layoutParams.setMarginEnd((int) marginEnd);
             }

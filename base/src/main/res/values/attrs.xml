@@ -117,6 +117,7 @@
         <attr name="ms_tile_left_icon" format="reference" />
         <attr name="ms_tile_left_icon_width" format="dimension" />
         <attr name="ms_tile_left_icon_height" format="dimension" />
+        <attr name="ms_tile_left_icon_margin_start" format="dimension" />
         <attr name="ms_tile_left_icon_margin_end" format="dimension" />
 
         <!-- 左侧文本 -->
