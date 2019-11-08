@@ -22,6 +22,8 @@ public class MSRecyclerView extends RecyclerView {
 
     private View noneDataView;
 
+    private OnFirstVisibleItemChangeListener firstVisibleItemChangeListener;
+
     public MSRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs, 0);
@@ -53,11 +55,6 @@ public class MSRecyclerView extends RecyclerView {
         array.recycle();
     }
 
-    public void setGridCount(int count){
-        GridLayoutManager layoutManager= new GridLayoutManager(getContext(), count);
-        setLayoutManager(layoutManager);
-    }
-
     @Override
     public void onChildAttachedToWindow(@NonNull View child) {
         super.onChildAttachedToWindow(child);
@@ -66,8 +63,39 @@ public class MSRecyclerView extends RecyclerView {
         }
     }
 
+    @Override
+    public void onScrollStateChanged(int newState) {
+        super.onScrollStateChanged(newState);
+        if(firstVisibleItemChangeListener != null){
+            int firstPosition = -1;
+            if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                RecyclerView.LayoutManager layoutManager = getLayoutManager();
+                if(layoutManager instanceof GridLayoutManager){
+                    firstPosition = ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
+                }else if(layoutManager instanceof LinearLayoutManager){
+                    firstPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+                }
+            }
+            if(firstPosition != -1){
+                firstVisibleItemChangeListener.onFirstItemVisibleChange(firstPosition);
+            }
+        }
+    }
+
+    public void setGridCount(int count){
+        GridLayoutManager layoutManager= new GridLayoutManager(getContext(), count);
+        setLayoutManager(layoutManager);
+    }
+
     public void setNoneDataView(View view) {
         noneDataView = view;
     }
 
+    public void setOnFirstVisibleItemChangeListener(OnFirstVisibleItemChangeListener listener){
+        firstVisibleItemChangeListener = listener;
+    }
+
+    public interface OnFirstVisibleItemChangeListener{
+        void onFirstItemVisibleChange(int newPosition);
+    }
 }

@@ -27,6 +27,7 @@ public class MSTopBar extends RelativeLayout {
     public static int cornerTextResourceId = 0;
 
     private Context context;
+    private View contentView;
     private MSTextView cornerText;
     private MSTextView titleText;
 
@@ -44,11 +45,11 @@ public class MSTopBar extends RelativeLayout {
 
         this.context = context;
 
-        View view = LayoutInflater.from(context).inflate(getLayoutResourceId(), null);
-        MSImageView back = view.findViewById(getBackImageResourceId());
-        MSTextView title = view.findViewById(getTitleTextResourceId());
+        contentView = LayoutInflater.from(context).inflate(getLayoutResourceId(), null);
+        MSImageView back = contentView.findViewById(getBackImageResourceId());
+        MSTextView title = contentView.findViewById(getTitleTextResourceId());
         titleText = title;
-        cornerText = view.findViewById(getCornerTextResourceId());
+        cornerText = contentView.findViewById(getCornerTextResourceId());
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.MSTopBar, defStyleAttr, defStyleAttr);
 
@@ -84,7 +85,7 @@ public class MSTopBar extends RelativeLayout {
         boolean hideIcon = array.getBoolean(R.styleable.MSTopBar_ms_top_hide_icon, false);
         back.setVisibility(hideIcon ? INVISIBLE : VISIBLE);
         array.recycle();
-        addView(view, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        addView(contentView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         back.setOnClickListener(new OnClickListener() {
             @Override
@@ -132,5 +133,9 @@ public class MSTopBar extends RelativeLayout {
 
     public MSTextView getTitleText() {
         return titleText;
+    }
+
+    public View getContentView() {
+        return contentView;
     }
 }
