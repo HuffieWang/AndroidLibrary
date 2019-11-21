@@ -23,6 +23,7 @@ import static com.musheng.android.processor.MSProcessor.createObject;
 import static com.musheng.android.processor.MSProcessor.createPackage;
 import static com.musheng.android.processor.MSProcessor.createParams;
 import static com.musheng.android.processor.MSProcessor.isNotTextEmpty;
+import static com.musheng.android.processor.MSProcessor.toUpperCaseFirstOne;
 
 /**
  * Author      : MuSheng
@@ -57,7 +58,7 @@ public class EntityProcessor {
             writeResponse(packageName, className, fileDir, annotation.response(), annotation.forceBuildResponse());
             if(annotation.post()){
                 String baseName = methodElement.toString().replaceAll("\\(\\)", "").replaceAll("/","_");
-                writeFetcher(packageName, className, fileDir, annotation.response(), baseName,  annotation.encrypt(),annotation.request().length > 0,  annotation.forceBuildFetcher());
+                writeFetcher(packageName, className, fileDir, annotation.request(), annotation.response(), baseName,  annotation.encrypt(),annotation.request().length > 0,  annotation.json(), annotation.forceBuildFetcher());
                 writeRequest(packageName, className, fileDir, annotation.request(),  annotation.forceBuildRequest());
             }
         } catch (IOException e) {
@@ -93,7 +94,7 @@ public class EntityProcessor {
         writer.close();
     }
 
-    private void writeFetcher(String packageName, String className,  String dir, String[] params, String baseName, String encrypt, boolean hasRequestBody, boolean forceBuild) throws IOException{
+    private void writeFetcher(String packageName, String className, String dir, String[] requests, String[] params, String baseName, String encrypt, boolean hasRequestBody, boolean isJson, boolean forceBuild) throws IOException{
         String fileName = className + "Fetcher.java";
         String path = dir + fileName;
         String simpleName = className + "Fetcher";
@@ -107,10 +108,27 @@ public class EntityProcessor {
         String padding = "        ";
 
         String defaultContent = "";
-        if(isNotTextEmpty(encrypt)){
-            defaultContent = padding + "return ((Api)MSRetrofit.getApi())." + baseName + (hasRequestBody ? ("(new "+ encrypt +"(request.toJSONString()))") : "()") + ".execute().body();";
+        if(isJson){
+            if(isNotTextEmpty(encrypt)){
+                defaultContent = padding + "return ((Api)MSRetrofit.getApi())." + baseName + (hasRequestBody ? ("(new "+ encrypt +"(request.toJSONString()))") : "()") + ".execute().body();";
+            } else {
+                defaultContent = padding + "return ((Api)MSRetrofit.getApi())." + baseName + (hasRequestBody ? ("(request)") : "()") + ".execute().body();";
+            }
         } else {
-            defaultContent = padding + "return ((Api)MSRetrofit.getApi())." + baseName + (hasRequestBody ? ("(request)") : "()") + ".execute().body();";
+            defaultContent = padding + "return ((Api)MSRetrofit.getApi())." + baseName+"(";
+            if(requests.length == 0){
+                requests = new String[]{"defaultParam"};
+            }
+
+            for(int i = 0; i < requests.length; i++){
+                String item = requests[i];
+                defaultContent = defaultContent + "request.get" + toUpperCaseFirstOne(item)+"()";
+                if(i < requests.length - 1){
+                    defaultContent = defaultContent + ", ";
+                }
+            }
+
+            defaultContent += (").execute().body();");
         }
 
         String debugContent = createObject("            ", className, params);
@@ -166,10 +184,14 @@ public class EntityProcessor {
                 + createClass("", "public class", simpleName,null, createParams("    ", params)
                         + createConstructor("    ", simpleName, params, "")
                         + createGetterAndSetter("    ", params)
+
                         + "    public String toJSONString(){\n" +
                         "        Gson gson = new Gson();\n" +
                         "        return gson.toJson(this);\n" +
-                        "    }"
+                        "    }\n"
+                        + "    public String getDefaultParam(){\n" +
+                        "        return \"\";\n" +
+                        "    }\n"
                 ,
                 new String[]{"MSFetcherRequest"});
         writer.write(builder);
@@ -192,16 +214,36 @@ public class EntityProcessor {
             String name = annotation.name();
             String encrypt = annotation.encrypt();
             String url = element.toString().replaceAll("\\(\\)", "").replaceAll("_", "/");
+            if(!annotation.json()){
+                content.append("    @FormUrlEncoded\n");
+            }
             content.append("    @POST(\"/").append(url + ".do").append("\")\n");
             content.append("    Call<").append(name).append("> ").append(url.replaceAll("/", "_"));
-            if(annotation.request().length > 0){
-                if(isNotTextEmpty(encrypt)){
-                    content.append("(@Body ").append(encrypt).append(" encrypt);");
+
+            if (annotation.json()){
+                if(annotation.request().length > 0){
+                    if(isNotTextEmpty(encrypt)){
+                        content.append("(@Body ").append(encrypt).append(" encrypt);");
+                    } else {
+                        content.append("(@Body ").append(name).append("Request param);");
+                    }
                 } else {
-                    content.append("(@Body ").append(name).append("Request param);");
+                    content.append("();");
                 }
             } else {
-                content.append("();");
+                String[] request = annotation.request();
+                if(request.length == 0){
+                    request = new String[]{"defaultParam"};
+                }
+                content.append("(");
+                for(int i = 0; i < request.length; i++){
+                    String item = request[i];
+                    content.append("@Field(\""+ item +"\") String " + item);
+                    if(i < request.length - 1){
+                        content.append(", ");
+                    }
+                }
+                content.append(");");
             }
             content.append("\n\n");
         }
@@ -215,6 +257,8 @@ public class EntityProcessor {
                     + createImport("retrofit2.Call")
                     + createImport("retrofit2.http.Body")
                     + createImport("retrofit2.http.POST")
+                    + createImport("retrofit2.http.Field")
+                    + createImport("retrofit2.http.FormUrlEncoded")
                     + createClass("", "public interface", className,null,
                     content.toString(),
                     null);
