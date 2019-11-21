@@ -93,4 +93,7 @@ public class MSTextView extends AppCompatTextView {
         }
     }
 
+    public void setStrikeThru(boolean isEnable){
+        getPaint().setFlags(isEnable ?  Paint. STRIKE_THRU_TEXT_FLAG : 0);
+    }
 }
