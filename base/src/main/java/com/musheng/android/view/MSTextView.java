@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -95,5 +96,21 @@ public class MSTextView extends AppCompatTextView {
 
     public void setStrikeThru(boolean isEnable){
         getPaint().setFlags(isEnable ?  Paint. STRIKE_THRU_TEXT_FLAG : 0);
+    }
+
+    public void setColorfulText(String... texts){
+        if(texts != null && texts.length > 1){
+            StringBuilder builder = new StringBuilder();
+            for(int i = 0; i < texts.length - 1; i += 2){
+                String color = texts[i];
+                String text = texts[i+1];
+                if (TextUtils.isEmpty(color)){
+                    builder.append(text);
+                } else {
+                    builder.append("<font color='").append(color).append("'>").append(text).append("</font>");
+                }
+            }
+            setText(Html.fromHtml(builder.toString()));
+        }
     }
 }
