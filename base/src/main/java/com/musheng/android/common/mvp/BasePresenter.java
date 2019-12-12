@@ -7,7 +7,6 @@ import com.musheng.android.library.R;
 import com.musheng.android.router.MSBaseRouter;
 import com.musheng.android.view.loading.MSLoading;
 
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,7 +116,7 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
     public void refresh(){
         List objects = new ArrayList<>();
         loadMoreMap.put(0, objects);
-        onLoadMore("1", String.valueOf(getPageSize()), objects);
+        onLoadMore("0", String.valueOf(getPageSize()), objects);
     }
 
     public void onLoadMore(String page, String pageSize, List list){
@@ -132,7 +131,7 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
     public  List loadMoreSuccess(String page, List list, int totalCount){
         this.page = Integer.valueOf(page);
         List cache = loadMoreMap.get(0);
-        if("1".equals(page)){
+        if("0".equals(page)){
             cache.clear();
         }
         cache.addAll(list);

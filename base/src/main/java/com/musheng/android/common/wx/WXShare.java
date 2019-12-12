@@ -1,4 +1,4 @@
-package com.musheng.android.common.share;
+package com.musheng.android.common.wx;
 
 import android.content.Context;
 
@@ -10,8 +10,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 public class WXShare {
 
-    private static final int TIMELINE_SUPPORTED_VERSION = 0x21020001;
-    private static String appID = "wxbe3077f095916455";
+    private static String appID = "wx9a0136b1c11a667b";
 
     private static Context mContext;
     private static IWXAPI wxapi;

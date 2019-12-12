@@ -80,6 +80,7 @@ public class MSTopBar extends RelativeLayout {
         }
         if(array.hasValue(R.styleable.MSTopBar_ms_top_corner)){
             cornerText.setText(array.getString(R.styleable.MSTopBar_ms_top_corner));
+            cornerText.setVisibility(VISIBLE);
         }
 
         boolean hideIcon = array.getBoolean(R.styleable.MSTopBar_ms_top_hide_icon, false);
@@ -116,18 +117,30 @@ public class MSTopBar extends RelativeLayout {
     }
 
     public int getLayoutResourceId(){
+        if(layoutId == 0){
+            return R.layout.view_default_top_bar;
+        }
         return layoutId;
     }
 
     public int getBackImageResourceId(){
+        if(backImageResourceId == 0){
+            return R.id.iv_left_icon;
+        }
         return backImageResourceId;
     }
 
     public int getTitleTextResourceId(){
+        if(titleTextResourceId == 0){
+            return R.id.tv_mid_content;
+        }
         return titleTextResourceId;
     }
 
     public int getCornerTextResourceId(){
+        if(cornerTextResourceId == 0){
+            return R.id.tv_corner;
+        }
         return cornerTextResourceId;
     }
 

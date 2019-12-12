@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/view_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_7"
+        android:layout_marginBottom="@dimen/dp_7"
+        android:layout_marginStart="@dimen/dp_11"
+        android:layout_marginEnd="@dimen/dp_11"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.musheng.android.view.MSImageView
+            android:id="@+id/iv_left_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:visibility="visible"
+            android:src="@mipmap/ic_back_black_default"
+            />
+
+        <com.musheng.android.view.MSTextView
+            android:id="@+id/tv_mid_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:text=""
+            android:gravity="center_vertical"
+            android:layout_centerInParent="true"
+            android:textColor="#000000"
+            android:textSize="@dimen/dp_16"
+            />
+
+        <com.musheng.android.view.MSTextView
+            android:id="@+id/tv_right_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:text=""
+            android:gravity="center_vertical"
+            android:layout_centerInParent="true"
+            android:textColor="#000000"
+            android:textSize="@dimen/dp_16"
+            android:visibility="gone"
+            />
+
+        <com.musheng.android.view.MSTextView
+            android:id="@+id/tv_corner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:padding="@dimen/dp_5"
+            android:visibility="gone"
+            android:textColor="#000000"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>
