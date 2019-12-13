@@ -162,9 +162,8 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
     @Override
     public void loadMoreComplete(int id, boolean isSuccess, boolean isNoMoreData) {
         if(smartRefreshLayout != null){
-            smartRefreshLayout.finishLoadMore(500);
-            smartRefreshLayout.finishRefresh(500);
-            smartRefreshLayout.setNoMoreData(isNoMoreData);
+            smartRefreshLayout.finishRefresh(500, isSuccess, isNoMoreData);
+            smartRefreshLayout.finishLoadMore(500, isSuccess, isNoMoreData);
         }
     }
 

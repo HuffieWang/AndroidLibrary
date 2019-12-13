@@ -8,6 +8,6 @@ import java.util.List;
  * Description :
  */
 public interface LoadMoreCallback{
-    List loadMoreSuccess(String page, List list, int totalCount);
-    void loadMoreFail(String page, int totalCount);
+    List loadMoreSuccess(int page, List list, int totalCount);
+    void loadMoreFail(int page, int totalCount);
 }

@@ -16,9 +16,9 @@ public abstract class LoadMoreFetcherResponse<R extends MSFetcherRequest, E> ext
 
     private LoadMoreCallback loadMoreCallback;
 
-    private String pageIndex;
+    private int pageIndex;
 
-    public LoadMoreFetcherResponse(LoadMoreCallback loadMoreCallback, String pageIndex) {
+    public LoadMoreFetcherResponse(LoadMoreCallback loadMoreCallback, int pageIndex) {
         this.loadMoreCallback = loadMoreCallback;
         this.pageIndex = pageIndex;
     }

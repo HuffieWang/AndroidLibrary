@@ -19,8 +19,11 @@ import java.util.List;
  */
 public abstract class BasePresenter<V extends IBaseView> implements IBasePresenter<V>, MSFetcherIndicator, LoadMoreCallback {
 
-    private static int sToastLayout = R.layout.view_ms_toast;
-    private static int sToastView = R.id.ms_toast_message;
+    public static int sLoadMorePageOffset = 0;
+    public static int sLoadMorePageSize = 20;
+
+    public static int sToastLayout = R.layout.view_ms_toast;
+    public static int sToastView = R.id.ms_toast_message;
     public static int sToastSuccessIcon = R.mipmap.ms_ic_toast_success;
     public static int sToastFailIcon = R.mipmap.ms_ic_toast_fail;
 
@@ -28,7 +31,7 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
 
     private boolean isActive;
 
-    private boolean isVisiable;
+    private boolean isVisible;
 
     private MSLoading loading;
 
@@ -63,7 +66,7 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
 
     @Override
     public void onViewInvisible() {
-        isVisiable = false;
+        isVisible = false;
         if(loading != null){
             loading.hide();
         }
@@ -71,7 +74,7 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
 
     @Override
     public void onViewRefresh() {
-        isVisiable = true;
+        isVisible = true;
         refresh();
     }
 
@@ -83,7 +86,7 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
 
     @Override
     public boolean isCancel() {
-        return !isVisiable;
+        return !isVisible;
     }
 
     @Override
@@ -100,48 +103,50 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
         try {
             objects = loadMoreMap.get(0);
             if(objects == null){
-                page = 0;
+                page = sLoadMorePageOffset;
                 objects = new ArrayList<>();
                 loadMoreMap.put(0, objects);
             }
         } catch (Exception ignore){
-            page = 0;
+            page = sLoadMorePageOffset;
             objects = new ArrayList<>();
             loadMoreMap.put(0, objects);
         }
-        onLoadMore(String.valueOf(page+1), String.valueOf(getPageSize()), objects);
+        onLoadMore(page+1, getPageSize(), objects);
     }
 
     @Override
     public void refresh(){
         List objects = new ArrayList<>();
         loadMoreMap.put(0, objects);
-        onLoadMore("0", String.valueOf(getPageSize()), objects);
+        onLoadMore(sLoadMorePageOffset, getPageSize(), objects);
     }
 
-    public void onLoadMore(String page, String pageSize, List list){
+    public void onLoadMore(int page, int pageSize, List list){
 
     }
 
     public int getPageSize(){
-        return 20;
+        return sLoadMorePageSize;
     }
 
     @Override
-    public  List loadMoreSuccess(String page, List list, int totalCount){
-        this.page = Integer.valueOf(page);
+    public  List loadMoreSuccess(int page, List list, int totalPage){
+        this.page = page;
         List cache = loadMoreMap.get(0);
-        if("0".equals(page)){
-            cache.clear();
+        if(cache != null){
+            if(sLoadMorePageOffset == page){
+                cache.clear();
+            }
+            cache.addAll(list);
         }
-        cache.addAll(list);
-        getView().loadMoreComplete(0, true, Integer.valueOf(page) * getPageSize() >= totalCount);
+        getView().loadMoreComplete(0, true, (page + 1 - sLoadMorePageOffset) >= totalPage);
         return cache;
     }
 
     @Override
-    public void loadMoreFail(String page, int totalCount){
-        getView().loadMoreComplete(0, false, Integer.valueOf(page) * getPageSize() >= totalCount);
+    public void loadMoreFail(int page, int totalPage){
+        getView().loadMoreComplete(0, false, (page + 1 - sLoadMorePageOffset) >= totalPage);
     }
 
     public <T> T bindLoading(T t){
