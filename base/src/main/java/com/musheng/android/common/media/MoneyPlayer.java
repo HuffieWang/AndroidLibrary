@@ -3,6 +3,7 @@ package com.musheng.android.common.media;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
+import android.text.TextUtils;
 
 import com.musheng.android.common.log.MSLog;
 
@@ -34,14 +35,14 @@ public class MoneyPlayer {
                 super.run();
                 List<String> strings = new ArrayList<>();
                 strings.add("voice/money_lianhe.mp3");
-                strings.addAll(readIntPart(String.valueOf(money), true));
+                strings.addAll(readIntPart(String.valueOf(money)));
                 strings.add("voice/money_cny.mp3");
                 play(context, strings);
             }
         }.start();
     }
 
-    public void play(final Context context, final float money){
+    public void play(final Context context, final String money){
         MSLog.d("prepare " + money);
         new Thread(){
             @Override
@@ -49,14 +50,13 @@ public class MoneyPlayer {
                 super.run();
                 List<String> strings = new ArrayList<>();
                 strings.add("voice/money_lianhe.mp3");
-                String str = String.valueOf(money);
-                String[] split = str.split("\\.");
+                String[] split = money.split("\\.");
                 if(split.length > 0){
-                    strings.addAll(readIntPart(split[0], true));
+                    strings.addAll(readIntPart(split[0]));
                 }
                 if(split.length > 1){
                     strings.add("voice/money_pot.mp3");
-                    strings.addAll(readIntPart(split[1], false));
+                    strings.addAll(readStringPart(split[1]));
                 }
                 strings.add("voice/money_cny.mp3");
 
@@ -181,34 +181,42 @@ public class MoneyPlayer {
      * @param integerPart
      * @return
      */
-    private List<String> readIntPart(String integerPart, boolean isSplit) {
+    private List<String> readIntPart(String integerPart) {
         List<String> result = new ArrayList<>();
         String intString = readInt(Integer.parseInt(integerPart));
         int len = intString.length();
         for (int i = 0; i < len; i++) {
             char current = intString.charAt(i);
             if (current == '拾') {
-                if(isSplit){
-                    result.add("voice/money_10.mp3");
-                }
+                result.add("voice/money_10.mp3");
+
             } else if (current == '佰') {
-                if(isSplit) {
-                    result.add("voice/money_100.mp3");
-                }
+                result.add("voice/money_100.mp3");
+
             } else if (current == '仟') {
-                if(isSplit) {
-                    result.add("voice/money_1000.mp3");
-                }
+                result.add("voice/money_1000.mp3");
+
             } else if (current == '万') {
-                if(isSplit) {
-                    result.add("voice/money_10000.mp3");
-                }
+                result.add("voice/money_10000.mp3");
+
             } else if (current == '亿') {
-                if(isSplit) {
-                    result.add("voice/money_100000000.mp3");
-                }
+                result.add("voice/money_100000000.mp3");
+
             } else {
                 result.add("voice/money_" + current + ".mp3");
+            }
+        }
+        return result;
+    }
+
+    private List<String> readStringPart(String stringPart){
+        List<String> result = new ArrayList<>();
+        if(!TextUtils.isEmpty(stringPart)){
+            for(int i = 0; i < stringPart.length(); i++){
+                int charIndex = stringPart.charAt(i);
+                if(charIndex >= 48 && charIndex <= 57){
+                    result.add("voice/money_" + (charIndex - 48) + ".mp3");
+                }
             }
         }
         return result;
