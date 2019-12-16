@@ -63,7 +63,7 @@ public class GlideRectBitmapTransform extends BitmapTransformation {
     }
 
     private int calculate(float dpValue){
-        return (int) dpValue / 3 * 4;
+        return (int) dpValue;
     }
 
     public static class GlideRect{
