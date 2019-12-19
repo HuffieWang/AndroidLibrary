@@ -49,7 +49,7 @@ public class MoneyPlayer {
             public void run() {
                 super.run();
                 List<String> strings = new ArrayList<>();
-//                strings.add("voice/money_lianhe.mp3");
+                strings.add("voice/money_lianhe.mp3");
                 String[] split = money.split("\\.");
                 if(split.length > 0){
                     strings.addAll(readIntPart(split[0]));
@@ -58,7 +58,7 @@ public class MoneyPlayer {
                     strings.add("voice/money_pot.mp3");
                     strings.addAll(readStringPart(split[1]));
                 }
-//                strings.add("voice/money_cny.mp3");
+                strings.add("voice/money_cny.mp3");
 
                 MSLog.d("start " + money);
                 play(context, strings);

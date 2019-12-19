@@ -2,6 +2,7 @@ package com.musheng.android.common.upgrade;
 
 import androidx.annotation.NonNull;
 
+import com.musheng.android.common.log.MSLog;
 import com.tencent.mmkv.MMKV;
 import com.xuexiang.xupdate.proxy.IUpdateHttpService;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -52,6 +53,7 @@ public class OKHttpUpdateHttpService implements IUpdateHttpService {
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", MMKV.defaultMMKV().decodeString("token"));
+
         OkHttpUtils.post()
                 .url(url)
                 .params(transform(params))
@@ -83,6 +85,7 @@ public class OKHttpUpdateHttpService implements IUpdateHttpService {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
+                        MSLog.d("下载失败 " + e.getMessage());
                         callback.onError(e);
                     }
 
