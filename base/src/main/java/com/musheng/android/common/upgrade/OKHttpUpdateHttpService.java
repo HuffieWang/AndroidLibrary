@@ -1,5 +1,7 @@
 package com.musheng.android.common.upgrade;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 
 import com.musheng.android.common.log.MSLog;
@@ -52,8 +54,10 @@ public class OKHttpUpdateHttpService implements IUpdateHttpService {
         //这里默认post的是Form格式，使用json格式的请修改 post -> postString
 
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", MMKV.defaultMMKV().decodeString("token"));
-
+        String token = MMKV.defaultMMKV().decodeString("token");
+        if(!TextUtils.isEmpty(token)){
+            headers.put("Authorization", MMKV.defaultMMKV().decodeString("token"));
+        }
         OkHttpUtils.post()
                 .url(url)
                 .params(transform(params))

@@ -58,6 +58,8 @@ dependencies {
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-16'
     api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-16'
     api 'androidx.legacy:legacy-support-v4:1.0.0'
-    api 'liji.library.dev:citypickerview:4.3.2'
+//    api 'liji.library.dev:citypickerview:5.2.0'
     api 'com.zhihu.android:matisse:0.5.2-beta4'
+
+    api 'org.greenrobot:greendao:3.2.2'
 }
