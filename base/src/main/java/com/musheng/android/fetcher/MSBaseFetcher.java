@@ -156,7 +156,25 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
      * @param response : 返回结果，成功和失败都回调在主线程
      * @param indicator : 指示器，可以控制请求是否被取消
      */
-    public Disposable enqueue(final R request, final MSFetcherResponse<R, E> response, final MSFetcherIndicator indicator){
+    public Disposable enqueue(final R request,  MSFetcherResponse<R, E> response, final MSFetcherIndicator indicator){
+
+        if(response == null){
+            response = new MSFetcherResponse<R, E>() {
+                @Override
+                public void onNext(E entity, R request) {
+                }
+
+                @Override
+                public void onError(MSFetcherThrowable error) {
+                }
+
+                @Override
+                public void onCancel() {
+                }
+            };
+        }
+
+        final MSFetcherResponse<R, E> finalResponse = response;
 
         isCancel = false;
 
@@ -210,7 +228,7 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
                     for(MSFetcherResponse<R,E> resp : responseList){
                         resp.onNext(entity, request);
                     }
-                    response.onNext(entity, request);
+                    finalResponse.onNext(entity, request);
                 }
             }
         }, new Consumer<Throwable>() {
@@ -219,9 +237,11 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
             public void accept(Throwable throwable) throws Exception {
                 if(!isCancel && (indicator == null || !indicator.isCancel())){
                     if(throwable instanceof MSFetcherThrowable){
-                        response.onError((MSFetcherThrowable)throwable);
+                        finalResponse.onError((MSFetcherThrowable)throwable);
+                    } else if(throwable.getCause() instanceof  MSFetcherThrowable){
+                        finalResponse.onError((MSFetcherThrowable)throwable.getCause());
                     } else {
-                        response.onError(new MSFetcherThrowable(throwable.getMessage()));
+                        finalResponse.onError(new MSFetcherThrowable(throwable.getMessage()));
                     }
                     for(MSFetcherResponse<R,E> resp : responseList){
                         if(throwable instanceof MSFetcherThrowable){

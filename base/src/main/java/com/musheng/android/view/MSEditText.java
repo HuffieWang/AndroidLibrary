@@ -10,7 +10,9 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
@@ -303,5 +305,25 @@ public class MSEditText extends AppCompatEditText {
         }
     }
 
+    private long lastActionTime;
+
+    public void setOnActionListener(final OnActionListener onActionListener){
+        setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(System.currentTimeMillis() - lastActionTime > 500){
+                    if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                        onActionListener.onEnter();
+                    }
+                    lastActionTime = System.currentTimeMillis();
+                }
+                return false;
+            }
+        });
+    }
+
+    public interface OnActionListener{
+        void onEnter();
+    }
 
 }

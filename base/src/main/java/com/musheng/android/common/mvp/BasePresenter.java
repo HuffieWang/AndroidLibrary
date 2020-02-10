@@ -29,15 +29,15 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
 
     protected WeakReference<V> viewReference;
 
-    private boolean isActive;
+    protected boolean isActive;
 
-    private boolean isVisible;
+    protected boolean isVisible;
 
-    private MSLoading loading;
+    protected MSLoading loading;
 
-    private int page;
+    protected int page;
 
-    private HashMap<Integer, List> loadMoreMap = new HashMap<>();
+    protected HashMap<Integer, List> loadMoreMap = new HashMap<>();
 
     static {
         MSToast.toastLayout = sToastLayout;
