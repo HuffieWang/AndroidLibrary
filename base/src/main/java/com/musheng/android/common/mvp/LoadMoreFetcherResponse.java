@@ -23,6 +23,10 @@ public abstract class LoadMoreFetcherResponse<R extends MSFetcherRequest, E> ext
         this.pageIndex = pageIndex;
     }
 
+    public LoadMoreFetcherResponse() {
+
+    }
+
     public abstract void onLoadMoreNext(E entity, R request);
 
     public abstract void onLoadMoreError(MSFetcherThrowable error);
