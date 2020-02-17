@@ -1,20 +1,21 @@
 package com.musheng.android.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-
+import android.widget.Toast;
 import androidx.appcompat.widget.AppCompatImageView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.musheng.android.common.glide.GlideRectBitmapTransform;
-
-import java.util.ArrayList;
+import com.musheng.android.library.R;
 import java.util.List;
 
 /**
@@ -42,6 +43,35 @@ public class MSImageView extends AppCompatImageView {
 
     public void loadCircle(String url){
         Glide.with(this).load(url).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(this);
+    }
+
+    public void setSaveEnable(boolean isEnable){
+        if(isEnable){
+            setDrawingCacheEnabled(true);
+            setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    saveImageToGallery(getContext(), getDrawingCache());
+                    return true;
+                }
+            });
+        } else {
+            setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return false;
+                }
+            });
+        }
+    }
+
+    public void save(){
+        saveImageToGallery(getContext(), getDrawingCache());
+    }
+
+    public static void saveImageToGallery(Context context, Bitmap bitmap) {
+        MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "title", "description");
+        Toast.makeText(context, context.getResources().getString(R.string.photo_save_success), Toast.LENGTH_SHORT).show();
     }
 
     public void centerRotate(float fromDegress, float toDegress, long duration, int repeatCount){
