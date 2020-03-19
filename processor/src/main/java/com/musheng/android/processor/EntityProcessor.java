@@ -19,7 +19,6 @@ import static com.musheng.android.processor.MSProcessor.createConstructor;
 import static com.musheng.android.processor.MSProcessor.createGetterAndSetter;
 import static com.musheng.android.processor.MSProcessor.createImport;
 import static com.musheng.android.processor.MSProcessor.createMethod;
-import static com.musheng.android.processor.MSProcessor.createObject;
 import static com.musheng.android.processor.MSProcessor.createPackage;
 import static com.musheng.android.processor.MSProcessor.createParams;
 import static com.musheng.android.processor.MSProcessor.isNotTextEmpty;
@@ -37,9 +36,7 @@ public class EntityProcessor {
             List<Element> elements = new ArrayList<>();
             for (Element annotatedElement : entities) {
                 if (annotatedElement.getKind() == ElementKind.METHOD) {
-
                     writeEntity(annotatedElement);
-
                     elements.add(annotatedElement);
                 }
             }
@@ -52,10 +49,14 @@ public class EntityProcessor {
     private void writeEntity(Element methodElement) {
         try {
             MSEntity annotation = methodElement.getAnnotation(MSEntity.class);
+            if((annotation.forceBuildFetcher() || annotation.forceBuildRequest() || annotation.forceBuildResponse())
+                && annotation.keep()){
+                throw new RuntimeException(annotation.name() + " can't override, check 'keep' annotation.");
+            }
             String packageName = ENTITY_PACKAGE;
             String className = annotation.name();
             String fileDir = JAVA_DIR + packageName.replace(".", "\\") + "\\";
-            writeResponse(packageName, className, fileDir, annotation.response(), annotation.forceBuildResponse());
+            writeResponse(packageName, className, fileDir, annotation.response(), annotation.dbTable(), annotation.forceBuildResponse());
             if(annotation.post()){
                 String baseName = methodElement.toString().replaceAll("\\(\\)", "").replaceAll("/","_");
                 writeFetcher(packageName, className, fileDir, annotation.request(), annotation.response(), baseName,  annotation.encrypt(),annotation.request().length > 0,  annotation.json(), annotation.forceBuildFetcher());
@@ -66,7 +67,7 @@ public class EntityProcessor {
         }
     }
 
-    private void writeResponse(String packageName, String className, String dir, String[] params, boolean forceBuild) throws IOException{
+    private void writeResponse(String packageName, String className, String dir, String[] params, String dbTable, boolean forceBuild) throws IOException{
 
         String fileName = className + ".java";
         String path = dir + fileName;
@@ -84,11 +85,22 @@ public class EntityProcessor {
                 }
             }
         }
-        builder += createClass("","public class", className,"BaseEntity", createParams("    ", params)
-                        + createConstructor("    ", className, null, "")
-                        + createConstructor("    ", className, params, "")
-                        + createGetterAndSetter("    ", params),
-                null);
+        String classContent = createParams("    ", params, true)
+                + createConstructor("    ", className, null, "");
+
+        if(isNotTextEmpty(dbTable)){
+            builder += createImport("org.greenrobot.greendao.annotation.*");
+            builder += "\n";
+            builder += "@Entity(\n" +
+                    "        nameInDb = \"" + dbTable + "\"\n" +
+                    ")";
+        } else {
+            classContent += createConstructor("    ", className, params, "");
+        }
+        classContent += createGetterAndSetter("    ", params);
+
+        builder += createClass("","public class", className,"BaseEntity", classContent, null);
+
         writer.write(builder);
         writer.flush();
         writer.close();
@@ -131,12 +143,14 @@ public class EntityProcessor {
             defaultContent += (").execute().body();");
         }
 
-        String debugContent = createObject("            ", className, params);
-        String content = padding + "if(ServerConfig.IS_LOCAL_DEBUG){\n";
+/*        String debugContent = createObject("            ", className, params);
+/       String content = padding + "if(ServerConfig.IS_LOCAL_DEBUG){\n";
         content += padding + "    Thread.sleep(1000);\n";
         content += debugContent + "\n";
         content += padding + "}\n";
-        content += defaultContent;
+        content += defaultContent;*/
+
+        String content = defaultContent;
 
         String fetchNetwork = createMethod("    ",new String[]{"@Override"}, className,
                 "fetchNetwork", new String[]{requestName + " request"},  new String[]{"Exception"}, content
@@ -217,7 +231,7 @@ public class EntityProcessor {
             if(!annotation.json()){
                 content.append("    @FormUrlEncoded\n");
             }
-            content.append("    @POST(\"/").append(url + ".do").append("\")\n");
+            content.append("    @POST(\"/").append(url).append("\")\n");
             content.append("    Call<").append(name).append("> ").append(url.replaceAll("/", "_"));
 
             if (annotation.json()){

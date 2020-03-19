@@ -8,7 +8,9 @@ package com.musheng.android.processor;
 public @interface MSEntity {
     String name();
     boolean json() default false;
-    boolean post() default false;
+    boolean post() default true;
+    boolean keep() default false;
+    String dbTable() default "";
     String[] request() default {};
     String[] response();
     String encrypt() default "";

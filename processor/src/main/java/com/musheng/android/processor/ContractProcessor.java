@@ -323,7 +323,7 @@ public class ContractProcessor {
                 +"    android:background=\"@color/white\"\n"
                 +"    android:layout_width=\"match_parent\"\n"
                 +"    android:layout_height=\"match_parent\">\n\n"
-                +"    <com.lianhe.app.mall.view.MSTopBar\n"
+                +"    <com.hippo.app.view.MSTopBar\n"
                 +"        android:id=\"@+id/top_" + baseName.toLowerCase() +"\"\n"
                 +"        android:layout_width=\"match_parent\"\n"
                 +"        android:layout_height=\"wrap_content\"\n"

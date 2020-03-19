@@ -17,9 +17,9 @@ import javax.lang.model.element.TypeElement;
 public class MSProcessor extends AbstractProcessor {
 
     /** 调整为你的项目路径和包名 **/
-    public static final String ROOT_DIR = "D:\\Android\\Project\\TestDemo\\";
-    public static final String ROOT_PACKAGE = "com.lianhe.app.testdemo";
-    public static final String CONFIG_CLASS = "com.lianhe.app.testdemo.config.ServerConfig";
+    public static final String ROOT_DIR = "E:\\Android\\Project\\HippoV2\\";
+    public static final String ROOT_PACKAGE = "com.hippo.app";
+    public static final String CONFIG_CLASS = "com.hippo.app.config.ServerConfig";
 
     /** 以下不用改 **/
     public static final String JAVA_DIR = ROOT_DIR + "app\\src\\main\\java\\";
@@ -121,7 +121,11 @@ public class MSProcessor extends AbstractProcessor {
         return builder.toString();
     }
 
-    public static  String createParams(String padding, String[] params) {
+    public static  String createParams(String padding, String[] params){
+        return createParams(padding, params, false);
+    }
+
+    public static  String createParams(String padding, String[] params, boolean containAnnotation) {
         StringBuilder builder = new StringBuilder();
         if(params != null && params.length > 0){
             for (String param : params) {
@@ -139,12 +143,22 @@ public class MSProcessor extends AbstractProcessor {
                     type = "String";
                     value = param;
                 }
+                String[] valueSplit = value.split("#");
+                if(valueSplit.length > 1){
+                    if(containAnnotation){
+                        for(int i = 1; i < valueSplit.length; i++){
+                            builder.append(padding).append(valueSplit[i]).append("\n");
+                        }
+                    }
+                }
+                value = valueSplit[0];
                 builder.append(padding).append("private ").append(type).append(" ").append(value).append(";\n");
             }
         }
         builder.append("\n");
         return builder.toString();
     }
+
 
     public static  String createConstructor(String padding, String constructorName, String[] params, String content){
         StringBuilder builder = new StringBuilder();
@@ -187,10 +201,12 @@ public class MSProcessor extends AbstractProcessor {
         return builder.toString();
     }
 
+
     public static  String createGetterAndSetter(String padding, String[] params){
         StringBuilder builder = new StringBuilder();
         if(params != null && params.length > 0){
             for (String param : params) {
+                param = param.split("#")[0];
 
                 String type;
                 String value;
