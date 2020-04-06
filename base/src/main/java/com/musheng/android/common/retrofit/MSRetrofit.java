@@ -70,6 +70,10 @@ public class MSRetrofit {
         return sApiProvider.provideApi(retrofit);
     }
 
+    public static Retrofit getRetrofit(){
+        return retrofit;
+    }
+
     // 請求攔截
     public static class HeaderInterceptor implements Interceptor {
 

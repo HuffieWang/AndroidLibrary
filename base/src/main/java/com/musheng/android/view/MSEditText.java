@@ -1,5 +1,6 @@
 package com.musheng.android.view;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -12,6 +13,8 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -305,6 +308,13 @@ public class MSEditText extends AppCompatEditText {
         }
     }
 
+    public void showSoftInput(Activity activity){
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+        requestFocus();
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    }
+
     private long lastActionTime;
 
     public void setOnActionListener(final OnActionListener onActionListener){
@@ -312,10 +322,10 @@ public class MSEditText extends AppCompatEditText {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(System.currentTimeMillis() - lastActionTime > 500){
-                    if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if (event != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                         onActionListener.onEnter();
+                        lastActionTime = System.currentTimeMillis();
                     }
-                    lastActionTime = System.currentTimeMillis();
                 }
                 return false;
             }

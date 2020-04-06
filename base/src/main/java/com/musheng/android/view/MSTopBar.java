@@ -30,6 +30,7 @@ public class MSTopBar extends RelativeLayout {
     private View contentView;
     private MSTextView cornerText;
     private MSTextView titleText;
+    private View backView;
 
     public MSTopBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -97,6 +98,11 @@ public class MSTopBar extends RelativeLayout {
             }
         });
 
+        backView = back;
+    }
+
+    public View getBackView() {
+        return backView;
     }
 
     public int getStatusBarHeight() {

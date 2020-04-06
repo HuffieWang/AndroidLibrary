@@ -40,7 +40,7 @@
                 />
             <com.musheng.android.view.MSTextView
                 android:id="@+id/tv_left_second_content"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_6"
                 android:layout_marginEnd="@dimen/dp_10"
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:visibility="gone"
-            android:gravity="center_vertical"
+            android:gravity="center"
             />
 
     <com.musheng.android.view.MSImageView

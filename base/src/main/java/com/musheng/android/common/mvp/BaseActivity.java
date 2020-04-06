@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -200,5 +203,35 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
 
     protected void onTextChanged(Editable editable){
 
+    }
+
+    protected void enableByInput(final View view, final EditText... inputs){
+        if(inputs.length == 0){
+            return;
+        }
+        for(EditText editText : inputs){
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    int i = 0;
+                    for(; i < inputs.length; i++){
+                        if(TextUtils.isEmpty(inputs[i].getText().toString())){
+                            break;
+                        }
+                    }
+                    view.setEnabled(i == inputs.length);
+                }
+            });
+        }
     }
 }

@@ -9,4 +9,5 @@ public interface IBasePresenter<V extends IBaseView> {
     void loadMore();
     void refresh();
     V getView();
+    <T> T bindLoading(T t);
 }

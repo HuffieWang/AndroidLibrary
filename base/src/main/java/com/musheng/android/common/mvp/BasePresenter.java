@@ -149,6 +149,7 @@ public abstract class BasePresenter<V extends IBaseView> implements IBasePresent
         getView().loadMoreComplete(0, false, (page + 1 - sLoadMorePageOffset) >= totalPage);
     }
 
+    @Override
     public <T> T bindLoading(T t){
         return MSLoading.bindLifeCycle(loading, t);
     }

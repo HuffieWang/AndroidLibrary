@@ -13,6 +13,12 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.telephony.TelephonyManager;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Author      : MuSheng
@@ -69,7 +75,7 @@ public class SystemUtils {
             return path;
         }
         // 以 content:// 开头的，比如 content://media/extenral/images/media/17766
-        try{
+        try {
             if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
                 Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
                 if (cursor != null) {
@@ -82,12 +88,12 @@ public class SystemUtils {
                     cursor.close();
                 }
             }
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
         }
-        if(path != null){
+        if (path != null) {
             return path;
         }
-        try{
+        try {
             // 4.4及之后的 是以 content:// 开头的，比如 content://com.android.providers.media.documents/document/image%3A235700
             if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme()) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 if (DocumentsContract.isDocumentUri(context, uri)) {
@@ -127,7 +133,7 @@ public class SystemUtils {
                     }
                 }
             }
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
         }
         return null;
     }
@@ -182,6 +188,37 @@ public class SystemUtils {
             }
         }
         return data;
+    }
+
+
+    public static String getMillsToDate(long milSecond, String pattern) {
+        Date date = new Date(milSecond);
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        return format.format(date);
+    }
+
+    public static long getDate2Mills(String dateString, String pattern) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
+        Date date = new Date();
+        try {
+            date = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime();
+    }
+
+    public static String getDeviceSN(Context context) {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return tm.getImei();
+            }
+        } catch (SecurityException e){
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }
