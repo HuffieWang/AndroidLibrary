@@ -67,7 +67,7 @@ public class MoneyPlayer {
         }.start();
     }
 
-    private void play(final Context context, final List<String> voicePlay){
+    public void play(final Context context, final List<String> voicePlay){
         synchronized (MoneyPlayer.this) {
 
             final MediaPlayer mMediaPlayer = new MediaPlayer();

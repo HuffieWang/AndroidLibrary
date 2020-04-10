@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.telephony.TelephonyManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -210,15 +209,14 @@ public class SystemUtils {
     }
 
     public static String getDeviceSN(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String serial = "";
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                return tm.getImei();
+                serial = Build.getSerial();
             }
         } catch (SecurityException e){
-            e.printStackTrace();
         }
-        return "";
+        return serial;
     }
 
 }
