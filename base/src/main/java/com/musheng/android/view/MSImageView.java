@@ -2,6 +2,7 @@ package com.musheng.android.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.View;
@@ -9,11 +10,18 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.musheng.android.common.glide.GlideRectBitmapTransform;
 import com.musheng.android.library.R;
 import java.util.List;
@@ -48,6 +56,24 @@ public class MSImageView extends AppCompatImageView {
 
     public void loadCircle(String url){
         Glide.with(this).load(url).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(this);
+    }
+
+    public void loadGif(int resId){
+        Glide.with(this).load(resId).listener(new RequestListener() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
+                if (resource instanceof GifDrawable) {
+                    ((GifDrawable)resource).setLoopCount(-1);
+                }
+                return false;
+            }
+
+        }).into(this);
     }
 
     public void setSaveEnable(boolean isEnable){
