@@ -58,6 +58,10 @@ public class MSImageView extends AppCompatImageView {
         Glide.with(this).load(url).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(this);
     }
 
+    public void loadCircle(Bitmap bitmap){
+        Glide.with(this).load(bitmap).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(this);
+    }
+
     public void loadGif(int resId){
         Glide.with(this).load(resId).listener(new RequestListener() {
             @Override
