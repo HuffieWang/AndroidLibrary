@@ -2,7 +2,11 @@ package com.musheng.android.common.mvp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,13 +24,16 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.jaeger.library.StatusBarUtil;
 import com.musheng.android.common.toast.MSToast;
 import com.musheng.android.common.toast.MSToastContent;
+import com.musheng.android.common.util.LanguageUtil;
 import com.musheng.android.common.util.NavigationBarUtil;
 import com.musheng.android.router.MSBaseRouter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.tencent.mmkv.MMKV;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 
@@ -162,6 +169,7 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
         super.onNewIntent(intent);
     }
 
+
     @Override
     public void loadMoreComplete(int id, boolean isSuccess, boolean isNoMoreData) {
         if(smartRefreshLayout != null){
@@ -234,4 +242,24 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
             });
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        String language = MMKV.defaultMMKV().decodeString("musheng_language");
+        super.attachBaseContext(updateResources(newBase, language));
+    }
+
+    private Context updateResources(Context context, String language) {
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        if(!TextUtils.isEmpty(language)){
+            Locale locale = LanguageUtil.getLocaleByLanguage(language);
+            configuration.setLocale(locale);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                configuration.setLocales(new LocaleList(locale));
+            }
+        }
+        return context.createConfigurationContext(configuration);
+    }
+
 }

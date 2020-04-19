@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.musheng.android.common.toast.MSToast;
 import com.musheng.android.common.toast.MSToastContent;
+import com.musheng.android.common.util.SharePreferenceUtil;
 import com.musheng.android.router.MSBaseRouter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -182,4 +183,7 @@ public abstract class BaseFragment <P extends IBasePresenter> extends Fragment i
     protected void onViewClicked(View view){
 
     }
+
+
+
 }
