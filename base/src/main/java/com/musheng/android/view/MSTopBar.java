@@ -8,10 +8,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.musheng.android.common.mvp.BaseActivity;
 import com.musheng.android.library.R;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
 /**
@@ -25,12 +28,14 @@ public class MSTopBar extends RelativeLayout {
     public static int backImageResourceId = 0;
     public static int titleTextResourceId = 0;
     public static int cornerTextResourceId = 0;
+    public static int cornerImageResourceId = 0;
 
     private Context context;
     private View contentView;
     private MSTextView cornerText;
     private MSTextView titleText;
     private View backView;
+    private MSImageView cornerIcon;
 
     public MSTopBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -51,7 +56,7 @@ public class MSTopBar extends RelativeLayout {
         MSTextView title = contentView.findViewById(getTitleTextResourceId());
         titleText = title;
         cornerText = contentView.findViewById(getCornerTextResourceId());
-
+        cornerIcon = contentView.findViewById(getCornerImageResourceId());
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.MSTopBar, defStyleAttr, defStyleAttr);
 
 
@@ -84,6 +89,21 @@ public class MSTopBar extends RelativeLayout {
             cornerText.setVisibility(VISIBLE);
         }
 
+        if(array.hasValue(R.styleable.MSTopBar_ms_top_corner_icon)){
+            cornerIcon.setVisibility(VISIBLE);
+            int resourceId = array.getResourceId(R.styleable.MSTopBar_ms_top_corner_icon, -1);
+            float width = array.getDimension(R.styleable.MSTopBar_ms_top_corner_icon_width, WRAP_CONTENT);
+            float height = array.getDimension(R.styleable.MSTopBar_ms_top_corner_icon_height, WRAP_CONTENT);
+            if(resourceId != -1){
+                cornerIcon.setImageResource(resourceId);
+            }
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) width, (int) height);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            layoutParams.rightMargin = 30;
+            cornerIcon.setLayoutParams(layoutParams);
+        }
+
         boolean hideIcon = array.getBoolean(R.styleable.MSTopBar_ms_top_hide_icon, false);
         back.setVisibility(hideIcon ? INVISIBLE : VISIBLE);
         array.recycle();
@@ -105,6 +125,22 @@ public class MSTopBar extends RelativeLayout {
         return backView;
     }
 
+    public MSTextView getTitleText() {
+        return titleText;
+    }
+
+    public View getContentView() {
+        return contentView;
+    }
+
+    public MSImageView getCornerIcon() {
+        return cornerIcon;
+    }
+
+    public MSTextView getCornerText() {
+        return cornerText;
+    }
+
     public int getStatusBarHeight() {
         int statusBarHeight = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -116,6 +152,10 @@ public class MSTopBar extends RelativeLayout {
 
     public void setCornerClickListener(OnClickListener listener){
         cornerText.setOnClickListener(listener);
+    }
+
+    public void setCornerImageClickListener(OnClickListener listener){
+        cornerIcon.setOnClickListener(listener);
     }
 
     public void setTitleText(String text){
@@ -150,11 +190,12 @@ public class MSTopBar extends RelativeLayout {
         return cornerTextResourceId;
     }
 
-    public MSTextView getTitleText() {
-        return titleText;
+    public int getCornerImageResourceId(){
+        if(cornerImageResourceId == 0){
+            return R.id.iv_corner;
+        }
+        return cornerImageResourceId;
     }
 
-    public View getContentView() {
-        return contentView;
-    }
+
 }

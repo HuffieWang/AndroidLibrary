@@ -49,6 +49,10 @@
         <attr name="ms_top_hide_icon" format="boolean" />
         <!-- 自动向上填充手机状态栏的高度 -->
         <attr name="ms_top_padding_status" format="boolean" />
+        <!-- 右边图标 -->
+        <attr name="ms_top_corner_icon" format="reference" />
+        <attr name="ms_top_corner_icon_width" format="dimension" />
+        <attr name="ms_top_corner_icon_height" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="MSRelativeLayout">

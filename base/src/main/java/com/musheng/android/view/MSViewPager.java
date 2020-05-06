@@ -22,6 +22,8 @@ public class MSViewPager extends ViewPager {
 
     private OnImageClickListener onImageClickListener;
 
+    private boolean isParentScrollView = true;
+
     public MSViewPager(@NonNull Context context) {
         super(context);
     }
@@ -85,20 +87,25 @@ public class MSViewPager extends ViewPager {
         void onClick(int position);
     }
 
+    public void setParentScrollView(boolean parentScrollView) {
+        isParentScrollView = parentScrollView;
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int height = 0;
-        for (int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
-            child.measure(widthMeasureSpec,
-                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-            int h = child.getMeasuredHeight();
-            if (h > height)
-                height = h;
+        if(isParentScrollView){
+            int height = 0;
+            for (int i = 0; i < getChildCount(); i++) {
+                View child = getChildAt(i);
+                child.measure(widthMeasureSpec,
+                        MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+                int h = child.getMeasuredHeight();
+                if (h > height)
+                    height = h;
+            }
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height,
+                    MeasureSpec.EXACTLY);
         }
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height,
-                MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
