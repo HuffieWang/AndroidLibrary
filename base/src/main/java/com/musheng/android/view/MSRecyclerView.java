@@ -3,6 +3,7 @@ package com.musheng.android.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -97,5 +98,33 @@ public class MSRecyclerView extends RecyclerView {
 
     public interface OnFirstVisibleItemChangeListener{
         void onFirstItemVisibleChange(int newPosition);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent e) {
+        if(isForceIgnoreTouchEvent){
+            return false;
+        }
+        return isForceInterceptTouchEvent || super.onInterceptTouchEvent(e);
+    }
+
+    public int getScollYDistance() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) this.getLayoutManager();
+        int position = layoutManager.findFirstVisibleItemPosition();
+        View firstVisiableChildView = layoutManager.findViewByPosition(position);
+        int itemHeight = firstVisiableChildView.getHeight();
+        return (position) * itemHeight - firstVisiableChildView.getTop();
+    }
+
+    private boolean isForceInterceptTouchEvent = false;
+    private boolean isForceIgnoreTouchEvent = false;
+
+
+    public void setForceInterceptTouchEvent(boolean forceInterceptTouchEvent) {
+        isForceInterceptTouchEvent = forceInterceptTouchEvent;
+    }
+
+    public void setForceIgnoreTouchEvent(boolean forceIgnoreTouchEvent) {
+        isForceIgnoreTouchEvent = forceIgnoreTouchEvent;
     }
 }
