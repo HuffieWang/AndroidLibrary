@@ -2,7 +2,6 @@ package com.musheng.android.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -24,6 +24,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.musheng.android.common.glide.GlideRectBitmapTransform;
 import com.musheng.android.library.R;
+
 import java.util.List;
 
 /**
@@ -45,13 +46,13 @@ public class MSImageView extends AppCompatImageView {
         super(context, attrs, defStyleAttr);
     }
 
-    public void load(String url){
-        Glide.with(this).load(url).into(this);
-    }
-
     public void clear(){
         setBackgroundDrawable(null);
         Glide.with(this).clear(this);
+    }
+
+    public void load(String url){
+        Glide.with(this).load(url).into(this);
     }
 
     public void loadCircle(String url){
@@ -60,6 +61,19 @@ public class MSImageView extends AppCompatImageView {
 
     public void loadCircle(Bitmap bitmap){
         Glide.with(this).load(bitmap).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(this);
+    }
+
+    public void loadRound(String url, int radius){
+        RoundedCorners roundedCorners = new RoundedCorners(radius);
+        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+        Glide.with(this).load(url).apply(options).into(this);
+    }
+
+    public void loadRect(String url, List<GlideRectBitmapTransform.GlideRect> rectList){
+
+        Glide.with(this).load(url).apply(RequestOptions.bitmapTransform(
+                new GlideRectBitmapTransform(getContext(), rectList)))
+                .into(this);
     }
 
     public void loadGif(int resId){
@@ -121,16 +135,4 @@ public class MSImageView extends AppCompatImageView {
         setAnimation(rotate);
     }
 
-    public void loadRound(String url, int radius){
-        RoundedCorners roundedCorners = new RoundedCorners(radius);
-        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
-        Glide.with(this).load(url).apply(options).into(this);
-    }
-
-    public void loadRect(String url, List<GlideRectBitmapTransform.GlideRect> rectList){
-
-        Glide.with(this).load(url).apply(RequestOptions.bitmapTransform(
-                new GlideRectBitmapTransform(getContext(), rectList)))
-                .into(this);
-    }
 }

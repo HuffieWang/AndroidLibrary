@@ -24,6 +24,10 @@ public class MSViewPager extends ViewPager {
 
     private boolean isParentScrollView = true;
 
+    private ImageLoader imageLoader;
+
+    private PictureAdapter pictureAdapter;
+
     public MSViewPager(@NonNull Context context) {
         super(context);
     }
@@ -34,13 +38,26 @@ public class MSViewPager extends ViewPager {
 
     public void setImageSource(OnImageClickListener onImageClickListener, Integer... integers){
         this.onImageClickListener = onImageClickListener;
-        PictureAdapter pictureAdapter = new PictureAdapter(getContext(), integers);
+        pictureAdapter = new PictureAdapter(getContext(), integers);
         setAdapter(pictureAdapter);
+    }
+
+    public void setImageSource(OnImageClickListener onImageClickListener, List<String> strings){
+        this.onImageClickListener = onImageClickListener;
+        pictureAdapter = new PictureAdapter(getContext(), strings);
+        setAdapter(pictureAdapter);
+    }
+
+    public void notifyDataSetChanged(){
+        if(pictureAdapter != null){
+            pictureAdapter.notifyDataSetChanged();
+        }
     }
 
     public class PictureAdapter extends PagerAdapter{
 
         private Integer[] list;
+        private List<String> stringList;
         private Context context;
 
         public PictureAdapter(Context context, Integer... integers) {
@@ -48,9 +65,20 @@ public class MSViewPager extends ViewPager {
             this.list = integers;
         }
 
+        public PictureAdapter(Context context, List<String> strings) {
+            this.context = context;
+            this.stringList = strings;
+        }
+
         @Override
         public int getCount() {
-            return list.length;
+            return list != null ? list.length : stringList.size();
+        }
+
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return POSITION_NONE;
         }
 
         @Override
@@ -60,10 +88,17 @@ public class MSViewPager extends ViewPager {
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            ImageView iv = new ImageView(context);
+            MSImageView iv = new MSImageView(context);
             iv.setScaleType(ImageView.ScaleType.FIT_XY);
-            iv.setImageResource(list[position]);
-
+            if(list != null){
+                iv.setImageResource(list[position]);
+            } else {
+                if(imageLoader != null){
+                    imageLoader.create(iv, stringList.get(position), position);
+                } else {
+                    iv.load(stringList.get(position));
+                }
+            }
             iv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -72,7 +107,6 @@ public class MSViewPager extends ViewPager {
                     }
                 }
             });
-
             container.addView(iv);
             return iv;
         }
@@ -109,4 +143,11 @@ public class MSViewPager extends ViewPager {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
+    public void setImageLoader(ImageLoader imageLoader) {
+        this.imageLoader = imageLoader;
+    }
+
+    public interface ImageLoader {
+        void create(MSImageView imageView, String url, int position);
+    }
 }
