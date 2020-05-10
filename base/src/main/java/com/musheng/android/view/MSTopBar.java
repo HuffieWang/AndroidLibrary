@@ -8,9 +8,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
 import com.musheng.android.common.mvp.BaseActivity;
 import com.musheng.android.library.R;
 
@@ -82,7 +80,9 @@ public class MSTopBar extends RelativeLayout {
         }
         if(array.hasValue(R.styleable.MSTopBar_ms_top_title_color)){
             title.setTextColor(array.getColor(R.styleable.MSTopBar_ms_top_title_color, Color.parseColor("#333333")));
-            cornerText.setTextColor(array.getColor(R.styleable.MSTopBar_ms_top_title_color, Color.parseColor("#333333")));
+        }
+        if(array.hasValue(R.styleable.MSTopBar_ms_top_corner_color)){
+            cornerText.setTextColor(array.getColor(R.styleable.MSTopBar_ms_top_corner_color, Color.parseColor("#333333")));
         }
         if(array.hasValue(R.styleable.MSTopBar_ms_top_corner)){
             cornerText.setText(array.getString(R.styleable.MSTopBar_ms_top_corner));
