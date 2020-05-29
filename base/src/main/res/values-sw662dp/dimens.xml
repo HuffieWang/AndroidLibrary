@@ -390,10 +390,14 @@
 	<dimen name="dp_400">706.1333dp</dimen>
 	<dimen name="dp_410">723.7867dp</dimen>
 	<dimen name="dp_422">744.9707dp</dimen>
+	<dimen name="dp_458">808.5227dp</dimen>
 	<dimen name="dp_472">833.2373dp</dimen>
 	<dimen name="dp_500">882.6667dp</dimen>
+	<dimen name="dp_528">932.0960dp</dimen>
+	<dimen name="dp_590">1041.5467dp</dimen>
 	<dimen name="dp_600">1059.2000dp</dimen>
 	<dimen name="dp_640">1129.8133dp</dimen>
+	<dimen name="dp_660">1165.1200dp</dimen>
 	<dimen name="dp_720">1271.0400dp</dimen>
 	<dimen name="dp_812">1433.4507dp</dimen>
 	<dimen name="sp_6">10.5920sp</dimen>

@@ -129,6 +129,7 @@ public class MSTile extends LinearLayout {
             boolean isBold = array.getBoolean(R.styleable.MSTile_ms_tile_left_second_text_bold, false);
             int background = array.getResourceId(R.styleable.MSTile_ms_tile_left_second_text_background, -1);
             float marginEnd = array.getDimension(R.styleable.MSTile_ms_tile_left_second_text_margin_end, -1);
+            float spacing = array.getDimension(R.styleable.MSTile_ms_tile_text_spacing, -1);
             leftSecondContent.setText(content);
             leftSecondContent.setTextColor(color);
             if(size != -1){
@@ -140,11 +141,17 @@ public class MSTile extends LinearLayout {
             if(background != -1){
                 leftSecondContent.setBackgroundResource(background);
             }
-            if(marginEnd != -1){
+            if(marginEnd != -1 || spacing != -1){
                 LayoutParams layoutParams = new LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-                layoutParams.setMarginEnd((int) marginEnd);
+                if(spacing != -1){
+                    layoutParams.setMargins(0, (int) spacing, 0, 0);
+                }
+                if(marginEnd != -1){
+                    layoutParams.setMarginEnd((int) marginEnd);
+                }
                 leftSecondContent.setLayoutParams(layoutParams);
             }
+
         }
 
         if(array.hasValue(R.styleable.MSTile_ms_tile_mid_text)){

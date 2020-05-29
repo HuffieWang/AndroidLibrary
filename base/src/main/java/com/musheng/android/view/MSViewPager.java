@@ -22,7 +22,7 @@ public class MSViewPager extends ViewPager {
 
     private OnImageClickListener onImageClickListener;
 
-    private boolean isParentScrollView = true;
+    private boolean isParentScrollView = false;
 
     private ImageLoader imageLoader;
 

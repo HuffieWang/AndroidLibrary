@@ -6,6 +6,9 @@
         <attr name="ms_font" format="string|reference" />
         <!-- 跑马灯，默认不开启 -->
         <attr name="ms_text_marquee" format="boolean" />
+        <!-- 字体中粗，默认不开启 -->
+        <attr name="ms_text_medium" format="boolean" />
+
     </declare-styleable>
 
     <declare-styleable name="MSEditText">
@@ -117,6 +120,9 @@
 
         <!-- 垂直Padding -->
         <attr name="ms_tile_padding_vertical" format="dimension" />
+
+        <!-- 行间距 -->
+        <attr name="ms_tile_text_spacing" format="dimension" />
 
         <!-- 左侧图标 -->
         <attr name="ms_tile_left_icon" format="reference" />

@@ -9,13 +9,17 @@ import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.musheng.android.common.util.SystemUtils;
 import com.musheng.android.library.R;
 
 
@@ -25,6 +29,8 @@ import com.musheng.android.library.R;
  * Description :
  */
 public class MSTextView extends AppCompatTextView {
+
+    private boolean isMedium;
 
     public MSTextView(Context context) {
         super(context);
@@ -54,8 +60,19 @@ public class MSTextView extends AppCompatTextView {
             setSingleLine(true);
             setSelected(true);
         }
+        isMedium = array.getBoolean(R.styleable.MSTextView_ms_text_medium, false);
         array.recycle();
         setIncludeFontPadding(false);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        if(isMedium){
+            TextPaint paint = getPaint();
+            paint.setStrokeWidth(1);
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        }
+        super.onDraw(canvas);
     }
 
     public void setText(int leftIcon, String input){
@@ -112,5 +129,17 @@ public class MSTextView extends AppCompatTextView {
             }
             setText(Html.fromHtml(builder.toString()));
         }
+    }
+
+    public void enableLongClickCopy(){
+        setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(SystemUtils.copyToClipboard(getContext(), getText().toString())){
+                    Toast.makeText(getContext(), "已复制到剪切板", Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
     }
 }
