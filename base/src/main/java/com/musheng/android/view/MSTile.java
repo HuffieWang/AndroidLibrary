@@ -193,6 +193,7 @@ public class MSTile extends LinearLayout {
             int background = array.getResourceId(R.styleable.MSTile_ms_tile_mid_second_text_background, -1);
             float marginEnd = array.getDimension(R.styleable.MSTile_ms_tile_mid_second_text_margin_end, -1);
             boolean gravityCenter = array.getBoolean(R.styleable.MSTile_ms_tile_mid_text_gravity_center, false);
+            float spacing = array.getDimension(R.styleable.MSTile_ms_tile_text_spacing, -1);
             midSecondContent.setText(content);
             midSecondContent.setTextColor(color);
             if(size != -1){
@@ -204,9 +205,14 @@ public class MSTile extends LinearLayout {
             if(background != -1){
                 midSecondContent.setBackgroundResource(background);
             }
-            if(marginEnd != -1){
+            if(marginEnd != -1 || spacing != -1){
                 LayoutParams layoutParams = new LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-                layoutParams.setMarginEnd((int) marginEnd);
+                if(spacing != -1){
+                    layoutParams.setMargins(0, (int) spacing, 0, 0);
+                }
+                if(marginEnd != -1){
+                    layoutParams.setMarginEnd((int) marginEnd);
+                }
                 midSecondContent.setLayoutParams(layoutParams);
             }
             midSecondContent.setGravity(gravityCenter ? Gravity.CENTER : Gravity.CENTER_VERTICAL);

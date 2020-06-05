@@ -273,8 +273,9 @@ public class PayPassView extends RelativeLayout {
     /**
      * 设置忘记密码文字
      */
-    public void setForgetText(String text) {
+    public PayPassView setForgetText(String text) {
         mTvForget.setText(text);
+        return this;
     }
     /**
      * 设置忘记密码文字大小
