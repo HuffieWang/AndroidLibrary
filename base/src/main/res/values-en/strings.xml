@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyLibrary</string>
+    <string name="pay_pass_title">Please enter the payment password</string>
+    <string name="photo_save_success">Picture saved</string>
+    <string name="text_copied">Copied to clipboard</string>
+    <string name="forget_password">Forget password?</string>
+</resources>

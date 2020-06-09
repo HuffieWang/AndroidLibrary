@@ -246,7 +246,11 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
     @Override
     protected void attachBaseContext(Context newBase) {
         String language = MMKV.defaultMMKV().decodeString("musheng_language");
-        super.attachBaseContext(updateResources(newBase, language));
+        if(!TextUtils.isEmpty(language)){
+            super.attachBaseContext(updateResources(newBase, language));
+        } else {
+            super.attachBaseContext(newBase);
+        }
     }
 
     private Context updateResources(Context context, String language) {

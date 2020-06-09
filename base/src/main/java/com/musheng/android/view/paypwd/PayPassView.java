@@ -45,7 +45,7 @@ public class PayPassView extends RelativeLayout {
     private Map<Integer, String> map;
     String[] letterStr = {"","ABC","DEF","GHI","JKL","MNO","PQRS","TUV","WXYZ"};
 
-    /**
+    /**D
      * 按钮对外接口
      */
     public static abstract class OnPayClickListener {

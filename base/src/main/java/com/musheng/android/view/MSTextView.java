@@ -136,7 +136,7 @@ public class MSTextView extends AppCompatTextView {
             @Override
             public boolean onLongClick(View v) {
                 if(SystemUtils.copyToClipboard(getContext(), getText().toString())){
-                    Toast.makeText(getContext(), "已复制到剪切板", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getContext().getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
                 }
                 return false;
             }

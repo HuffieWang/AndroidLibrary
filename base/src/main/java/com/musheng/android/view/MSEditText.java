@@ -159,10 +159,12 @@ public class MSEditText extends AppCompatEditText {
             case EASY_TYPE_PASSWORD:
                 setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 setPattern(PATTERN_PASSWORD);
+                setTypeface(Typeface.DEFAULT);
                 break;
             case EASY_TYPE_PAY_PASSWORD:
                 setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
                 setPattern(PATTERN_PAY_PASSWORD);
+                setTypeface(Typeface.DEFAULT);
                 break;
             case EASY_TYPE_TOKEN:
                 setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED
@@ -177,6 +179,7 @@ public class MSEditText extends AppCompatEditText {
                 setPattern(PATTERN_CNY);
                 break;
         }
+        invalidate();
     }
 
     public void setPattern(String p) {

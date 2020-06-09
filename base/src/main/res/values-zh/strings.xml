@@ -1,8 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MyLibrary</string>
-    <string name="photo_save_success">图片已保存</string>
     <string name="pay_pass_title">请输入支付密码</string>
+    <string name="photo_save_success">图片已保存</string>
     <string name="text_copied">已复制到剪切板</string>
-    <string name="forget_password">忘记密码?</string>
-
+    <string name="forget_password">Forget password?</string>
 </resources>
