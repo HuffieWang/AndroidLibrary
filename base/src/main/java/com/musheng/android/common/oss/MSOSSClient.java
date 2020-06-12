@@ -119,7 +119,7 @@ public class MSOSSClient {
 
         try {
             PutObjectResult putObjectResult = ossClient.putObject(request);
-            MSLog.e(TAG, "putObject() result " + putObjectResult);
+//            MSLog.e(TAG, "putObject() result " + putObjectResult);
             if(putObjectResult.getStatusCode() == 200){
                 return true;
             }

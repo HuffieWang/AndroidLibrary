@@ -4,5 +4,6 @@
     <string name="pay_pass_title">请输入支付密码</string>
     <string name="text_copied">已复制到剪切板</string>
     <string name="forget_password">忘记密码?</string>
+    <string name="request_fail">请求失败</string>
 
 </resources>

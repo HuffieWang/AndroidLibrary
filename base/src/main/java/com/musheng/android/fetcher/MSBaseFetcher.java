@@ -188,7 +188,7 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
             public void subscribe(ObservableEmitter<E> emitter) throws Exception {
                 Collection<MSFetcherEntityProvider<R, E>> entityProviders = providerMap.values();
                 if(entityProviders.isEmpty()) {
-                    emitter.onError(new MSFetcherThrowable( "未知错误"));
+                    emitter.onError(new MSFetcherThrowable( "Unknown Error"));
                     return;
                 }
                 
@@ -209,7 +209,7 @@ public abstract class MSBaseFetcher<R extends MSFetcherRequest, E> {
                     index++;
                 }
                 if (entity == null) {
-                    emitter.onError(new MSFetcherThrowable( "请求失败"));
+                    emitter.onError(new MSFetcherThrowable("Fail"));
                     return;
                 }
                 
