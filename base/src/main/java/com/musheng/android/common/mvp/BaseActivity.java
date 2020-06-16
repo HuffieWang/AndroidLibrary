@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.jaeger.library.StatusBarUtil;
+import com.musheng.android.common.log.MSLog;
 import com.musheng.android.common.toast.MSToast;
 import com.musheng.android.common.toast.MSToastContent;
 import com.musheng.android.common.util.LanguageUtil;
@@ -246,6 +247,7 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
     @Override
     protected void attachBaseContext(Context newBase) {
         String language = MMKV.defaultMMKV().decodeString("musheng_language");
+        MSLog.d("activity language is " + language);
         if(!TextUtils.isEmpty(language)){
             super.attachBaseContext(updateResources(newBase, language));
         } else {
