@@ -215,6 +215,10 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
     }
 
     protected void enableByInput(final View view, final EditText... inputs){
+        enableByInput(view, null, inputs);
+    }
+
+    protected void enableByInput(final View view, final OnEnableChangeListener listener, final EditText... inputs){
         if(inputs.length == 0){
             return;
         }
@@ -238,16 +242,24 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
                             break;
                         }
                     }
-                    view.setEnabled(i == inputs.length);
+                    boolean isEnable = i == inputs.length;
+                    if(listener == null){
+                        view.setEnabled(isEnable);
+                    } else {
+                        view.setEnabled(listener.onChange(isEnable));
+                    }
                 }
             });
         }
     }
 
+    public interface OnEnableChangeListener{
+        boolean onChange(boolean isEnable);
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         String language = MMKV.defaultMMKV().decodeString("musheng_language");
-        MSLog.d("activity language is " + language);
         if(!TextUtils.isEmpty(language)){
             super.attachBaseContext(updateResources(newBase, language));
         } else {

@@ -3,10 +3,14 @@ package com.musheng.android.common.mvp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -185,5 +189,43 @@ public abstract class BaseFragment <P extends IBasePresenter> extends Fragment i
     }
 
 
+    protected void enableByInput(final View view, final BaseActivity.OnEnableChangeListener listener, final EditText... inputs){
+        if(inputs.length == 0){
+            return;
+        }
+        for(EditText editText : inputs){
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    int i = 0;
+                    for(; i < inputs.length; i++){
+                        if(TextUtils.isEmpty(inputs[i].getText().toString())){
+                            break;
+                        }
+                    }
+                    boolean isEnable = i == inputs.length;
+                    if(listener == null){
+                        view.setEnabled(isEnable);
+                    } else {
+                        view.setEnabled(listener.onChange(isEnable));
+                    }
+                }
+            });
+        }
+    }
+
+    public interface OnEnableChangeListener{
+        boolean onChange(boolean isEnable);
+    }
 
 }
