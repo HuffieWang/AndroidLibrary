@@ -7,9 +7,11 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
+import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -165,6 +167,11 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
         super.onNewIntent(intent);
@@ -269,14 +276,20 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
 
     private Context updateResources(Context context, String language) {
         Resources resources = context.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
         Configuration configuration = resources.getConfiguration();
-        if(!TextUtils.isEmpty(language)){
-            Locale locale = LanguageUtil.getLocaleByLanguage(language);
-            configuration.setLocale(locale);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                configuration.setLocales(new LocaleList(locale));
+        try{
+            if(!TextUtils.isEmpty(language)){
+                Locale locale = LanguageUtil.getLocaleByLanguage(language);
+                configuration.setLocale(locale);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    configuration.setLocales(new LocaleList(locale));
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        resources.updateConfiguration(configuration,dm);
         return context.createConfigurationContext(configuration);
     }
 

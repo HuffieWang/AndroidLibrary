@@ -17,6 +17,10 @@ public class LanguageUtil {
         Locale locale = Locale.ENGLISH;
         if ("zh".equals(language)) {
             locale = Locale.SIMPLIFIED_CHINESE;
+        }else if("tw".equals(language)){
+            locale = Locale.TAIWAN;
+        }else{
+            locale = Locale.ENGLISH;
         }
         return locale;
     }
