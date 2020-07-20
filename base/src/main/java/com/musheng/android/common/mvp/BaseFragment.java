@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.musheng.android.common.toast.MSToast;
 import com.musheng.android.common.toast.MSToastContent;
@@ -223,6 +224,11 @@ public abstract class BaseFragment <P extends IBasePresenter> extends Fragment i
             });
         }
     }
+
+    public FragmentManager getSupportFragmentManager() {
+        return getChildFragmentManager();
+    }
+
 
     public interface OnEnableChangeListener{
         boolean onChange(boolean isEnable);
