@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -39,6 +38,7 @@ public class MSEditText extends AppCompatEditText {
     public static final int EASY_TYPE_PAY_PASSWORD = 5;
     public static final int EASY_TYPE_TOKEN = 6;
     public static final int EASY_TYPE_CNY = 7;
+    public static final int EASY_TYPE_VISIBLE_PASSWORD = 8;
 
     public static final String PATTERN_PHONE = "^[0-9]{1,11}$";
     public static final String PATTERN_VERIFY_CODE = "^[0-9]{1,6}$";
@@ -158,6 +158,11 @@ public class MSEditText extends AppCompatEditText {
                 break;
             case EASY_TYPE_PASSWORD:
                 setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                setPattern(PATTERN_PASSWORD);
+                setTypeface(Typeface.DEFAULT);
+                break;
+            case EASY_TYPE_VISIBLE_PASSWORD:
+                setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 setPattern(PATTERN_PASSWORD);
                 setTypeface(Typeface.DEFAULT);
                 break;
