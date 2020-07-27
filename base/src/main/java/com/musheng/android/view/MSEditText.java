@@ -58,6 +58,8 @@ public class MSEditText extends AppCompatEditText {
     private int minNum;
     private MinMaxTextWatcher maxMinNumWatcher;
 
+    private boolean isAutoAppendZero;
+
     public MSEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs, 0);
@@ -176,15 +178,41 @@ public class MSEditText extends AppCompatEditText {
                         | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 setScale(8);
                 setPattern(PATTERN_TOKEN);
+                autoAppendZero();
                 break;
             case EASY_TYPE_CNY:
                 setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED
                         | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 setScale(2);
                 setPattern(PATTERN_CNY);
+                autoAppendZero();
                 break;
         }
         invalidate();
+    }
+
+    public void autoAppendZero(){
+        if(!isAutoAppendZero){
+            addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(s.toString().startsWith(".")){
+                        setText("0" + s);
+                    }
+                }
+            });
+        }
+        isAutoAppendZero = true;
     }
 
     public void setPattern(String p) {
