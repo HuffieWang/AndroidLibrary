@@ -1,11 +1,16 @@
 package com.musheng.android.common.retrofit;
 
+import android.text.TextUtils;
+
+import com.musheng.android.common.util.SharePreferenceUtil;
 import com.tencent.mmkv.MMKV;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -27,20 +32,29 @@ public class MSRetrofit {
     private static MSRetrofit instance;
     private static RetrofitApiProvider sApiProvider;
     private static RetrofitHeaderProvider sHeaderProvider;
+    private static OkHttpClient okHttpClient;
 
     private static Retrofit retrofit;
 
     private MSRetrofit(){
-        retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(MSGsonConverterFactory.create())
-                .client(new OkHttpClient.Builder()
-                        .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                        .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
-                        .addNetworkInterceptor(new HeaderInterceptor())
-                .addInterceptor(new AuthInterceptor())
-                .writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS).build())
-                .build();
+        if(okHttpClient == null){
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(MSGsonConverterFactory.create())
+                    .client(new OkHttpClient.Builder()
+                            .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                            .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
+                            .addNetworkInterceptor(new HeaderInterceptor())
+                            .addInterceptor(new AuthInterceptor())
+                            .writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS).build())
+                    .build();
+        }else{
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(MSGsonConverterFactory.create())
+                    .client(okHttpClient)
+                    .build();
+        }
     }
 
     public interface RetrofitApiProvider {
@@ -53,6 +67,10 @@ public class MSRetrofit {
 
     public static void setRetrofitUrl(String url){
         baseUrl = url;
+    }
+
+    public static void setOkhttpClient(OkHttpClient client){
+        okHttpClient = client;
     }
 
     public static void setRetrofitApiProvider(RetrofitApiProvider apiProvider){
@@ -82,10 +100,15 @@ public class MSRetrofit {
             Request originalRequest = chain.request();
             if (true) {
                 String token = MMKV.defaultMMKV().decodeString("token");
+                String regId = SharePreferenceUtil.getString("registration_id");
+                if(TextUtils.isEmpty(regId)){
+                    regId = "";
+                }
                 Request updateRequest = null;
                 if(sHeaderProvider == null){
                     updateRequest = originalRequest.newBuilder()
                             .header("Authorization", token == null ? "" : token)
+                            .header("registration_id",regId)
                             .build();
                 } else {
                     Request.Builder builder = originalRequest.newBuilder();
