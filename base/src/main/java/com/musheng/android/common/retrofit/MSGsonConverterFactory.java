@@ -19,15 +19,20 @@ import retrofit2.Retrofit;
  */
 public class MSGsonConverterFactory extends Converter.Factory {
 
-    public static MSGsonConverterFactory create() {
-        return create(new Gson());
-    }
-
-    public static MSGsonConverterFactory create(Gson gson) {
-        return new MSGsonConverterFactory(gson);
-    }
+    private static GsonProvider gsonProvider;
 
     private final Gson gson;
+
+    public static MSGsonConverterFactory create() {
+        if(gsonProvider != null){
+            return new MSGsonConverterFactory(gsonProvider.create());
+        }
+        return new MSGsonConverterFactory(new Gson());
+    }
+
+    public static void setGsonProvider(GsonProvider gsonProvider) {
+        MSGsonConverterFactory.gsonProvider = gsonProvider;
+    }
 
     private MSGsonConverterFactory(Gson gson) {
         if (gson == null) {
@@ -47,4 +52,9 @@ public class MSGsonConverterFactory extends Converter.Factory {
     public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
         return new MSGsonRequestBodyConverter<>(gson);
     }
+
+    public interface GsonProvider{
+        Gson create();
+    }
+
 }

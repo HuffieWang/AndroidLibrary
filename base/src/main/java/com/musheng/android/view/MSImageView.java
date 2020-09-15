@@ -23,6 +23,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.musheng.android.common.glide.GlideRectBitmapTransform;
+import com.musheng.android.common.glide.blur.GlideBlurformation;
 import com.musheng.android.library.R;
 
 import java.util.List;
@@ -67,6 +68,23 @@ public class MSImageView extends AppCompatImageView {
         RoundedCorners roundedCorners = new RoundedCorners(radius);
         RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
         Glide.with(this).load(url).apply(options).into(this);
+    }
+
+    public void loadVague(String url){
+        Glide.with(this)
+                .load(url)
+                .apply(RequestOptions.bitmapTransform(new GlideBlurformation(getContext())))
+                .into(this);
+    }
+
+    public void loadVagurRound(String url,int radius){
+        try{
+            RoundedCorners roundedCorners = new RoundedCorners(radius);
+            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+            Glide.with(this).load(url).apply(options).apply(RequestOptions.bitmapTransform(new GlideBlurformation(getContext()))).into(this);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void loadRect(String url, List<GlideRectBitmapTransform.GlideRect> rectList){
