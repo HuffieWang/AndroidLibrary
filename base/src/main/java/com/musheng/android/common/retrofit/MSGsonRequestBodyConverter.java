@@ -15,7 +15,6 @@ import retrofit2.Converter;
 public class MSGsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
 
     private final Gson gson;
-    public static RequestConverter requestConverter;
 
     public MSGsonRequestBodyConverter(Gson gson) {
         this.gson = gson;
@@ -23,11 +22,6 @@ public class MSGsonRequestBodyConverter<T> implements Converter<T, RequestBody> 
 
     @Override
     public RequestBody convert(T value) throws IOException {
-        return requestConverter.convert(value);
+        return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), gson.toJson(value));
     }
-
-    public interface RequestConverter<T>{
-        RequestBody convert(T value);
-    }
-
 }
