@@ -120,13 +120,13 @@ public class MSRetrofit2 {
         public abstract Map<String, String> getHeaders();
         public abstract Object getResponse(TypeAdapter adapter, JSONObject json) throws IOException, JSONException;
         public long getConnectTimeout(){
-            return 15;
+            return 60;
         }
         public long getReadTimeout(){
-            return 15;
+            return 60;
         }
         public long getWriteTimeout(){
-            return 15;
+            return 60;
         }
     }
 }

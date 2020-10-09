@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.SSLSocketFactory;
-
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,9 +22,9 @@ import retrofit2.Retrofit;
  */
 public class MSRetrofit {
 
-    public final static int CONNECT_TIMEOUT = 15;
-    public final static int READ_TIME_OUT = 15;
-    public final static int WRITE_TIME_OUT = 15;
+    public final static int CONNECT_TIMEOUT = 60;
+    public final static int READ_TIME_OUT = 60;
+    public final static int WRITE_TIME_OUT = 60;
 
     private static String baseUrl;
     private static MSRetrofit instance;
