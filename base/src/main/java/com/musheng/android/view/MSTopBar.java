@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
+import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +77,23 @@ public class MSTopBar extends RelativeLayout {
                 back.setVisibility(INVISIBLE);
             }
         }
+        if(array.hasValue(R.styleable.MSTopBar_ms_top_icon_width)){
+            ViewGroup.LayoutParams layoutParams = back.getLayoutParams();
+            layoutParams.width = (int) array.getDimension(R.styleable.MSTopBar_ms_top_icon_width,WRAP_CONTENT);
+            layoutParams.height = (int) array.getDimension(R.styleable.MSTopBar_ms_top_icon_height,WRAP_CONTENT);
+            back.setLayoutParams(layoutParams);
+        }
         if(array.hasValue(R.styleable.MSTopBar_ms_top_title)){
             title.setText(array.getString(R.styleable.MSTopBar_ms_top_title));
+        }
+        if(array.hasValue(R.styleable.MSTopBar_ms_top_title_bold)){
+            if(array.getBoolean(R.styleable.MSTopBar_ms_top_title_bold,false)){
+                TextPaint tp = title.getPaint();
+                tp.setFakeBoldText(true);
+            }
+        }
+        if(array.hasValue(R.styleable.MSTopBar_ms_top_title_size)){
+            title.setTextSize(TypedValue.COMPLEX_UNIT_PX,array.getDimension(R.styleable.MSTopBar_ms_top_title_size,WRAP_CONTENT));
         }
         if(array.hasValue(R.styleable.MSTopBar_ms_top_title_color)){
             title.setTextColor(array.getColor(R.styleable.MSTopBar_ms_top_title_color, Color.parseColor("#333333")));

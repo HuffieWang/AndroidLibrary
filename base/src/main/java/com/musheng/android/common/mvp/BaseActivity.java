@@ -1,11 +1,13 @@
 package com.musheng.android.common.mvp;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.LocaleList;
 import android.os.PersistableBundle;
 import android.text.Editable;
@@ -56,7 +58,6 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
 
     private SmartRefreshLayout smartRefreshLayout;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +70,14 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
         ButterKnife.bind(this);
         initWidget();
         activities.add(this);
+    }
+
+
+    /**
+     * 是否设置成透明状态栏，即就是全屏模式
+     */
+    protected boolean isUseFullScreenMode() {
+        return false;
     }
 
     @Override
@@ -115,7 +124,6 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
         toast.show();
     }
 
-
     @Override
     public void showErrorTips(String tips) {
         Toast toast = MSToast.makeToast(getViewContext(), tips, BasePresenter.sToastFailIcon);
@@ -123,13 +131,13 @@ public abstract class BaseActivity <P extends IBasePresenter> extends AppCompatA
         toast.show();
     }
 
-
     @Override
     public void showCustomTips(MSToastContent tips) {
         Toast toast = MSToast.makeToast(tips);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
 
     @Override
     public Context getViewContext() {

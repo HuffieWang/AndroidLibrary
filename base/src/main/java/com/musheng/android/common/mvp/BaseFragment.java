@@ -1,8 +1,10 @@
 package com.musheng.android.common.mvp;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -105,7 +107,6 @@ public abstract class BaseFragment <P extends IBasePresenter> extends Fragment i
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
-
 
     @Override
     public void showErrorTips(String tips) {

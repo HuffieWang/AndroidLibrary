@@ -2,6 +2,7 @@ package com.musheng.android.common.mvp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.musheng.android.common.toast.MSToastContent;

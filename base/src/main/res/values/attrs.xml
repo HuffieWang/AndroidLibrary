@@ -57,6 +57,10 @@
         <attr name="ms_top_corner_icon_width" format="dimension" />
         <attr name="ms_top_corner_icon_height" format="dimension" />
         <attr name="ms_top_corner_color" format="color" />
+        <attr name="ms_top_title_size" format="dimension"/>
+        <attr name="ms_top_icon_width" format="dimension"/>
+        <attr name="ms_top_icon_height" format="dimension"/>
+        <attr name="ms_top_title_bold" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="MSRelativeLayout">

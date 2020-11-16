@@ -2,6 +2,7 @@ package com.musheng.android.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -27,6 +29,7 @@ import com.musheng.android.common.glide.blur.GlideBlurformation;
 import com.musheng.android.library.R;
 
 import java.util.List;
+
 
 /**
  * Author      : MuSheng
@@ -56,6 +59,10 @@ public class MSImageView extends AppCompatImageView {
         Glide.with(this).load(url).into(this);
     }
 
+    public void load(Bitmap bitmap){
+        Glide.with(this).load(bitmap).into(this);
+    }
+
     public void loadCircle(String url){
         Glide.with(this).load(url).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(this);
     }
@@ -65,9 +72,50 @@ public class MSImageView extends AppCompatImageView {
     }
 
     public void loadRound(String url, int radius){
+        loadRound(url,radius,false);
+    }
+
+    public void loadRound(String url, int radius,boolean isFadeIn){
         RoundedCorners roundedCorners = new RoundedCorners(radius);
         RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
-        Glide.with(this).load(url).apply(options).into(this);
+        if(isFadeIn){
+            Glide.with(this).load(url).apply(options).transition(GenericTransitionOptions.<Drawable>with(R.anim.alph_fade_in)).into(this);
+        }else{
+            Glide.with(this).load(url).apply(options).into(this);
+        }
+    }
+
+    public void loadRound(Context context,String url, int radius){
+        RoundedCorners roundedCorners = new RoundedCorners(radius);
+        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+        Glide.with(context).load(url).apply(options).into(this);
+    }
+
+    public void loadRound(String url,int leftTopRadius,int rightTopRadius,int leftBottomRadius,int rightBottomRadius){
+        RequestOptions requestOptions = new RequestOptions()
+                .transform(new RoundedCornersTransform(leftTopRadius,rightTopRadius,rightBottomRadius,leftBottomRadius));
+        Glide.with(this).load(url).apply(requestOptions).into(this);
+    }
+
+    public void loadRound(String url,int leftTopRadius,int rightTopRadius,int leftBottomRadius,int rightBottomRadius,int errorImg){
+        loadRound(url,leftTopRadius,rightTopRadius,leftBottomRadius,rightBottomRadius,errorImg,false);
+    }
+
+    public void loadRound(String url,int leftTopRadius,int rightTopRadius,int leftBottomRadius,int rightBottomRadius,int errorImg,boolean isFadeIn){
+        RequestOptions requestOptions = new RequestOptions()
+                .transform(new RoundedCornersTransform(leftTopRadius,rightTopRadius,rightBottomRadius,leftBottomRadius));
+        if(isFadeIn){
+            Glide.with(this).load(url).apply(requestOptions).error(errorImg).transition(GenericTransitionOptions.<Drawable>with(R.anim.alph_fade_in)).into(this);
+        }else{
+            Glide.with(this).load(url).apply(requestOptions).error(errorImg).into(this);
+        }
+    }
+
+    public void loadVague(Bitmap bitmap){
+        Glide.with(this)
+                .load(bitmap)
+                .apply(RequestOptions.bitmapTransform(new GlideBlurformation(getContext())))
+                .into(this);
     }
 
     public void loadVague(String url){
@@ -77,11 +125,38 @@ public class MSImageView extends AppCompatImageView {
                 .into(this);
     }
 
+    public void loadVague(String url,boolean isFadeIn){
+        if(isFadeIn){
+            Glide.with(this)
+                    .load(url)
+                    .apply(RequestOptions.bitmapTransform(new GlideBlurformation(getContext())))
+                    .transition(GenericTransitionOptions.<Drawable>with(R.anim.alph_fade_in))
+                    .into(this);
+        }else{
+            Glide.with(this)
+                    .load(url)
+                    .apply(RequestOptions.bitmapTransform(new GlideBlurformation(getContext())))
+                    .into(this);
+        }
+    }
+
     public void loadVagurRound(String url,int radius){
         try{
-            RoundedCorners roundedCorners = new RoundedCorners(radius);
+            loadVagurRound(url,radius,false);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void loadVagurRound(String url,int radius,boolean isFadeIn){
+        try{
+            RoundedCorners roundedCorners = new RoundedCorners(50);
             RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
-            Glide.with(this).load(url).apply(options).apply(RequestOptions.bitmapTransform(new GlideBlurformation(getContext()))).into(this);
+            if(isFadeIn){
+                Glide.with(this).load(url).apply(options).apply(RequestOptions.bitmapTransform(new GlideBlurformation(getContext()))).transition(GenericTransitionOptions.<Drawable>with(R.anim.alph_fade_in)).into(this);
+            }else{
+                Glide.with(this).load(url).apply(options).apply(RequestOptions.bitmapTransform(new GlideBlurformation(getContext()))).into(this);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

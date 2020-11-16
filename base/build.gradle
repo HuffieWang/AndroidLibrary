@@ -53,8 +53,10 @@ dependencies {
     api 'com.github.bumptech.glide:glide:4.9.0'
     api 'com.github.HuffieWang:banner:1.0.3'
     api 'com.jaeger.statusbarutil:library:1.5.1'
-    api 'com.github.HuffieWang:FlycoTabLayout:3.0.1'
-    api 'com.github.razerdp:BasePopup:2.2.1'
+
+
+    api 'com.github.HuffieWang:FlycoTabLayout:3.0.2'
+    api 'com.github.razerdp:BasePopup:2.2.7'
     api 'com.contrarywind:Android-PickerView:4.1.8'
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-16'
     api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-16'
@@ -64,4 +66,5 @@ dependencies {
 
     api 'org.greenrobot:greendao:3.2.2'
     api 'com.aliyun.dpa:oss-android-sdk:+'
+
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:background="@color/transparent"
+    android:gravity="bottom|center_horizontal"
+    android:layout_height="wrap_content">
+
+    <com.musheng.android.view.MSTextView
+        android:layout_marginBottom="@dimen/dp_100"
+        android:id="@+id/tv_tips"
+        android:textColor="@color/white"
+        android:alpha="0.9"
+        android:textSize="@dimen/dp_14"
+        android:paddingLeft="@dimen/dp_8"
+        android:paddingRight="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
+        android:background="@drawable/bg_default_custom_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
